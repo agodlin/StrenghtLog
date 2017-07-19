@@ -1,5 +1,6 @@
 package com.example.agodlin.strenghtlog.ui.exercise;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -37,6 +38,7 @@ public class ExerciseActivity extends AppCompatActivity implements ExerciseFragm
 
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
+        Snackbar.make(getWindow().getDecorView().getRootView(), "Pressed : " + item.toString(), Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show();
     }
 }
