@@ -1,4 +1,4 @@
-package com.example.agodlin.strenghtlog.ui.exercise.dummy;
+package com.example.agodlin.strenghtlog.ui.exercise;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,34 +11,34 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DummyContent {
+public class ExerciseContent {
 
     /**
-     * An array of sample (dummy) items.
+     * An array of sample (dummy) mItems.
      */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<ExerciseItem> ITEMS = new ArrayList<ExerciseItem>();
 
     /**
-     * A map of sample (dummy) items, by ID.
+     * A map of sample (dummy) mItems, by ID.
      */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static final Map<String, ExerciseItem> ITEM_MAP = new HashMap<String, ExerciseItem>();
 
     private static final int COUNT = 15;
 
     static {
-        // Add some sample items.
+        // Add some sample mItems.
         for (int i = 1; i <= COUNT; i++) {
             addItem(createDummyItem(i));
         }
     }
 
-    private static void addItem(DummyItem item) {
+    private static void addItem(ExerciseItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    private static ExerciseItem createDummyItem(int position) {
+        return new ExerciseItem(String.valueOf(position), "Item " + position, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -53,12 +53,12 @@ public class DummyContent {
     /**
      * A dummy item representing a piece of content.
      */
-    public static class DummyItem {
+    public static class ExerciseItem {
         public final String id;
         public final String content;
         public final String details;
 
-        public DummyItem(String id, String content, String details) {
+        public ExerciseItem(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;
