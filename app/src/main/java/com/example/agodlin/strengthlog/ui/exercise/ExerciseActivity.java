@@ -1,4 +1,4 @@
-package com.example.agodlin.strenghtlog.ui.exercise;
+package com.example.agodlin.strengthlog.ui.exercise;
 
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;

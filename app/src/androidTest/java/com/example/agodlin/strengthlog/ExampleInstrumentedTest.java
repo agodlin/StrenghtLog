@@ -1,4 +1,4 @@
-package com.example.agodlin.strenghtlog;
+package com.example.agodlin.strengthlog;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package com.example.agodlin.strenghtlog;
+package com.example.agodlin.strengthlog;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.agodlin.strenghtlog.ui.exercise;
+package com.example.agodlin.strengthlog.ui.exercise;
 
 import java.util.ArrayList;
 import java.util.HashMap;

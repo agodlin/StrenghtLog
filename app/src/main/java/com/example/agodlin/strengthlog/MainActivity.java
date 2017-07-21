@@ -1,4 +1,4 @@
-package com.example.agodlin.strenghtlog;
+package com.example.agodlin.strengthlog;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.agodlin.strenghtlog.ui.exercise.ExerciseActivity;
+import com.example.agodlin.strenghtlog.R;
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
