@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.agodlin.strenghtlog.R;
+import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment.OnListFragmentInteractionListener;
 
 import java.util.ArrayList;

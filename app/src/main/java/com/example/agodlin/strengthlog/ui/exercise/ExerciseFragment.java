@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.agodlin.strenghtlog.R;
+import com.example.agodlin.strengthlog.R;
 
 /**
  * A fragment representing a list of Items.

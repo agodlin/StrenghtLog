@@ -4,7 +4,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.agodlin.strenghtlog.R;
+import com.example.agodlin.strengthlog.R;
 
 public class ExerciseActivity extends AppCompatActivity implements ExerciseFragment.OnListFragmentInteractionListener {
 

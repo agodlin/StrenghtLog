@@ -14,7 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.agodlin.strenghtlog.R;
+import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseActivity;
 
 public class MainActivity extends AppCompatActivity
