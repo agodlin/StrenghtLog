@@ -90,7 +90,7 @@ public class ExerciseFragment extends Fragment {
                                     return;
                                 }
                                 Log.d(TAG, "Text set To : " + name);
-                                ExerciseContent.ITEMS.add(new ExerciseContent.ExerciseItem(Integer.toString(ExerciseContent.ITEMS.size()+1), name, ""));
+                                ExerciseContent.ITEMS.add(new ExerciseContent.ExerciseItem(ExerciseContent.ITEMS.size()+1, name, ""));
                                 mRecyclerView.getAdapter().notifyItemInserted(ExerciseContent.ITEMS.size()-1);
                             }
                         })

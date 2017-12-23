@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseActivity;
+import com.example.agodlin.strengthlog.ui.weight.WeightActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.exercises) {
             Intent intent = new Intent(this, ExerciseActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.weight) {
+            Intent intent = new Intent(this, WeightActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
