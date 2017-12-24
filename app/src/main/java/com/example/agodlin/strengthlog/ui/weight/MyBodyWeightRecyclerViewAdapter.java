@@ -6,22 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseRecyclerViewAdapter;
 import com.example.agodlin.strengthlog.ui.weight.BodyWeightFragment.OnListFragmentInteractionListener;
-import com.example.agodlin.strengthlog.ui.weight.dummy.DummyContent.DummyItem;
+import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent.BodyWeightItem;
 import com.example.agodlin.strengthlog.R;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link BodyWeightItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyBodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<MyBodyWeightRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<BodyWeightItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyBodyWeightRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyBodyWeightRecyclerViewAdapter(List<BodyWeightItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,11 +31,13 @@ public class MyBodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<MyBody
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_bodyweight, parent, false);
-        return new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).content);
@@ -60,13 +63,13 @@ public class MyBodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<MyBody
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public BodyWeightItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.weight);
+            mContentView = (TextView) view.findViewById(R.id.date);
         }
 
         @Override

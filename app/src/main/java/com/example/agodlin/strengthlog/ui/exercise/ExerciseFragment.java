@@ -67,9 +67,6 @@ public class ExerciseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_list, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        mRecyclerView.setAdapter(new ExerciseRecyclerViewAdapter(ExerciseContent.ITEMS, mListener));
 
         setUpRecyclerView(view);
 
@@ -107,6 +104,7 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void setUpRecyclerView(View view) {
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.setAdapter(new ExerciseRecyclerViewAdapter(ExerciseContent.ITEMS, mListener));
         mRecyclerView.setHasFixedSize(true);

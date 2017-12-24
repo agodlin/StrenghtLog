@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,3 +15,13 @@
     app:layoutManager="LinearLayoutManager"
     tools:context="com.example.agodlin.strengthlog.ui.weight.BodyWeightFragment"
     tools:listitem="@layout/fragment_bodyweight" />
+
+<android.support.design.widget.FloatingActionButton
+android:id="@+id/add_weight_in_button"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignParentBottom="true"
+android:layout_alignParentEnd="true"
+android:layout_margin="@dimen/fab_margin"
+app:srcCompat="@android:drawable/ic_input_add" />
+</RelativeLayout>
