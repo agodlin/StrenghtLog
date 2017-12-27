@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
@@ -77,20 +78,49 @@ public class BodyWeightFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                final EditText input = new EditText(getActivity());
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                View viewNumeric = inflater.inflate(R.layout.numeric, null, false);
+                final EditText input = (EditText) viewNumeric.findViewById(R.id.numeric);
                 builder.setView(input);
-                builder.setTitle(R.string.insert_exercise_name)
+                builder.setTitle(R.string.insert_weight)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                String name = input.getText().toString();
-                                if (name.isEmpty())
+                                final String weight = input.getText().toString();
+                                if (weight.isEmpty())
                                 {
                                     Log.d(TAG, "Text Empty, do nothing");
                                     return;
                                 }
-                                Log.d(TAG, "Text set To : " + name);
-                                BodyWeightContent.ITEMS.add(new BodyWeightContent.BodyWeightItem(String.valueOf(BodyWeightContent.ITEMS.size()+1), name, ""));
-                                mRecyclerView.getAdapter().notifyItemInserted(BodyWeightContent.ITEMS.size()-1);
+                                Log.d(TAG, "Text set To : " + weight);
+                                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                                View view = inflater.inflate(R.layout.date_picker, null, false);
+                                final DatePicker myDatePicker = (DatePicker) view.findViewById(R.id.myDatePicker);
+
+                                // so that the calendar view won't appear
+                                myDatePicker.setCalendarViewShown(false);
+                                // the alert dialog
+                                new AlertDialog.Builder(getActivity()).setView(view)
+                                        .setTitle("Set Date")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                int month = myDatePicker.getMonth() + 1;
+                                                int day = myDatePicker.getDayOfMonth();
+                                                int year = myDatePicker.getYear();
+                                                String date = new StringBuilder().append(day).append("-")
+                                                        .append(month).append("-").append(year).toString();
+                                                BodyWeightItem bodyWeightItem = new BodyWeightItem(date,
+                                                        weight, date);
+                                                BodyWeightContent.ITEMS.add(0, bodyWeightItem);
+                                                dialog.cancel();
+                                                mRecyclerView.getAdapter().notifyItemInserted(0);
+                                            }
+
+                                        })
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        }).show();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -101,7 +131,6 @@ public class BodyWeightFragment extends Fragment {
                 builder.show();
             }
         });
-
         return view;
     }
 
