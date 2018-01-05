@@ -1,5 +1,7 @@
 package com.example.agodlin.strengthlog.ui.weight.dummy;
 
+import com.example.agodlin.strengthlog.common.Date;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +29,11 @@ public class BodyWeightContent {
      * A dummy item representing a piece of content.
      */
     public static class BodyWeightItem {
-        public final String id;
+        public final Date id;
         public final String content;
         public final String details;
 
-        public BodyWeightItem(String id, String content, String details) {
+        public BodyWeightItem(Date id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;

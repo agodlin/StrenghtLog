@@ -17,9 +17,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseContent;
 import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
 import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent.BodyWeightItem;
+
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A fragment representing a list of Items.
@@ -106,13 +110,23 @@ public class BodyWeightFragment extends Fragment {
                                                 int month = myDatePicker.getMonth() + 1;
                                                 int day = myDatePicker.getDayOfMonth();
                                                 int year = myDatePicker.getYear();
-                                                String date = new StringBuilder().append(day).append("-")
-                                                        .append(month).append("-").append(year).toString();
+                                                Date date = new Date(day, month, year);
                                                 BodyWeightItem bodyWeightItem = new BodyWeightItem(date,
-                                                        weight, date);
-                                                BodyWeightContent.ITEMS.add(0, bodyWeightItem);
+                                                        weight, date.toString());
+                                                Comparator<BodyWeightItem> c = new Comparator<BodyWeightItem>()
+                                                {
+                                                    public int compare(BodyWeightItem u1, BodyWeightItem u2)
+                                                    {
+                                                        return u1.id.compareTo(u2.id);
+                                                    }
+                                                };
+                                                int position = Collections.binarySearch(BodyWeightContent.ITEMS, bodyWeightItem, c);
+                                                if (position < 0) {
+                                                    position = position * -1 - 1;
+                                                    BodyWeightContent.ITEMS.add(position, bodyWeightItem);
+                                                    mRecyclerView.getAdapter().notifyItemInserted(position);
+                                                }
                                                 dialog.cancel();
-                                                mRecyclerView.getAdapter().notifyItemInserted(0);
                                             }
 
                                         })
