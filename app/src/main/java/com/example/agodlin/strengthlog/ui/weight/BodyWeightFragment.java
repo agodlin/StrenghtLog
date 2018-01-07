@@ -11,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -21,6 +24,7 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseContent;
 import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
 import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent.BodyWeightItem;
+import com.google.gson.Gson;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -63,6 +67,7 @@ public class BodyWeightFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -146,6 +151,26 @@ public class BodyWeightFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_export:
+                Log.i(TAG, "Export pressed");
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(BodyWeightContent.ITEMS);
+                Log.i(TAG, jsonString);
+            default:
+                break;
+        }
+        return false;
     }
 
 

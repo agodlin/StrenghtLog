@@ -2,17 +2,22 @@ package com.example.agodlin.strengthlog.ui.weight;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
 
 public class WeightActivity extends AppCompatActivity implements BodyWeightFragment.OnListFragmentInteractionListener {
-
+    private static String TAG = "WeightActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weight);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (findViewById(R.id.fragment_container) != null) {
 
             // However, if we're being restored from a previous state,
@@ -33,10 +38,19 @@ public class WeightActivity extends AppCompatActivity implements BodyWeightFragm
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, firstFragment).commit();
         }
+
     }
 
     @Override
-    public void onListFragmentInteraction(BodyWeightContent.BodyWeightItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_weight, menu);
+        return true;
+    }
 
+
+    @Override
+    public void onListFragmentInteraction(BodyWeightContent.BodyWeightItem item) {
+        Log.i(TAG, item.id.toString());
     }
 }

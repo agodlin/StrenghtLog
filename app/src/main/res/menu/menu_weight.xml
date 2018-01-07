@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.agodlin.strengthlog.ui.weight.WeightActivity">
     <item
+        android:id="@+id/action_export"
+        android:orderInCategory="100"
+        android:title="export"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
