@@ -51,6 +51,6 @@ public class WeightActivity extends AppCompatActivity implements BodyWeightFragm
 
     @Override
     public void onListFragmentInteraction(BodyWeightContent.BodyWeightItem item) {
-        Log.i(TAG, item.id.toString());
+        Log.i(TAG, item.date.toString());
     }
 }

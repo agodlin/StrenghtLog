@@ -86,6 +86,7 @@ public class BodyWeightFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "button pressed add_weight_in_button");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                 View viewNumeric = inflater.inflate(R.layout.numeric, null, false);
@@ -100,7 +101,7 @@ public class BodyWeightFragment extends Fragment {
                                     Log.d(TAG, "Text Empty, do nothing");
                                     return;
                                 }
-                                Log.d(TAG, "Text set To : " + weight);
+                                Log.d(TAG, "Weight value : " + weight);
                                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                                 View view = inflater.inflate(R.layout.date_picker, null, false);
                                 final DatePicker myDatePicker = (DatePicker) view.findViewById(R.id.myDatePicker);
@@ -116,17 +117,19 @@ public class BodyWeightFragment extends Fragment {
                                                 int day = myDatePicker.getDayOfMonth();
                                                 int year = myDatePicker.getYear();
                                                 Date date = new Date(day, month, year);
+                                                Log.d(TAG, "date value : " + date.toString());
                                                 BodyWeightItem bodyWeightItem = new BodyWeightItem(date,
-                                                        weight, date.toString());
+                                                        weight, "");
                                                 Comparator<BodyWeightItem> c = new Comparator<BodyWeightItem>()
                                                 {
                                                     public int compare(BodyWeightItem u1, BodyWeightItem u2)
                                                     {
-                                                        return u1.id.compareTo(u2.id);
+                                                        return u1.date.compareTo(u2.date);
                                                     }
                                                 };
                                                 int position = Collections.binarySearch(BodyWeightContent.ITEMS, bodyWeightItem, c);
                                                 if (position < 0) {
+                                                    Log.d(TAG, "BodyWeightItem insert position : " + position + " value : " + bodyWeightItem.toString());
                                                     position = position * -1 - 1;
                                                     BodyWeightContent.ITEMS.add(position, bodyWeightItem);
                                                     mRecyclerView.getAdapter().notifyItemInserted(position);
@@ -163,10 +166,9 @@ public class BodyWeightFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_export:
-                Log.i(TAG, "Export pressed");
                 Gson gson = new Gson();
                 String jsonString = gson.toJson(BodyWeightContent.ITEMS);
-                Log.i(TAG, jsonString);
+                Log.i(TAG, "BodyWeightContent json value : " + jsonString);
             default:
                 break;
         }

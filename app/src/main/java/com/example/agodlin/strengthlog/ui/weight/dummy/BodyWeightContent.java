@@ -29,19 +29,19 @@ public class BodyWeightContent {
      * A dummy item representing a piece of content.
      */
     public static class BodyWeightItem {
-        public final Date id;
-        public final String content;
-        public final String details;
+        public final Date date;
+        public final String weight;
+        public final String comment;
 
-        public BodyWeightItem(Date id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
+        public BodyWeightItem(Date date, String weight, String comment) {
+            this.date = date;
+            this.weight = weight;
+            this.comment = comment;
         }
 
         @Override
         public String toString() {
-            return content;
+            return date.toString() + "/t" + weight;
         }
     }
 }

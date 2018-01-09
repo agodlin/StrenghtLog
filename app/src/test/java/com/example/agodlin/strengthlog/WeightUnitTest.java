@@ -23,6 +23,6 @@ public class WeightUnitTest {
         assertNotNull(jsonString);
         BodyWeightContent.BodyWeightItem itemParsed = gson.fromJson(jsonString, BodyWeightContent.BodyWeightItem.class);
         assertNotNull(itemParsed);
-        assertEquals(item.id, itemParsed.id);
+        assertEquals(item.date, itemParsed.date);
     }
 }
