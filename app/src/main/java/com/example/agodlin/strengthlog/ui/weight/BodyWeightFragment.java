@@ -169,6 +169,7 @@ public class BodyWeightFragment extends Fragment {
                 Gson gson = new Gson();
                 String jsonString = gson.toJson(BodyWeightContent.ITEMS);
                 Log.i(TAG, "BodyWeightContent json value : " + jsonString);
+
             default:
                 break;
         }

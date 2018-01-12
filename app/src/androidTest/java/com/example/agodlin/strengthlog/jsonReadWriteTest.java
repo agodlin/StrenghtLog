@@ -1,11 +1,16 @@
 package com.example.agodlin.strengthlog;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
+import com.example.agodlin.strengthlog.utils.FileIO;
 import com.google.gson.Gson;
 
 import org.junit.Test;
@@ -25,10 +30,14 @@ import static org.junit.Assert.assertEquals;
 public class jsonReadWriteTest {
     @Test
     public void useAppContext() throws Exception {
+
         // Context of the app under test.
         Context context = InstrumentationRegistry.getTargetContext();
 
-        File file = new File(context.getFilesDir(), "tmp.json");
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+        }
 
         Date date = new Date(1,1,2018);
         BodyWeightContent.BodyWeightItem item = new BodyWeightContent.BodyWeightItem(date, "test1", "test2");
@@ -36,27 +45,12 @@ public class jsonReadWriteTest {
         String jsonString = gson.toJson(item);
 
         String filename = "myfile";
-        FileOutputStream outputStream;
 
-        try {
-            outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(jsonString.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        FileIO.write(jsonString.getBytes(), context, filename);
 
-        FileInputStream inputStream;
+        String jsonTest = new String(FileIO.read(context, filename));
 
-        try {
-            inputStream = context.openFileInput(filename);
-            byte[] buffer = new byte[inputStream.available()];
-            inputStream.read(buffer);
-            String value = new String(buffer);
-            assertEquals(jsonString, value);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        assertEquals(jsonString, jsonTest);
 
         context.deleteFile(filename);
     }
