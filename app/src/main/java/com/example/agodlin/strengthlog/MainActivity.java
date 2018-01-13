@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseActivity;
 import com.example.agodlin.strengthlog.ui.exercise_name.ExerciseNameActivity;
 import com.example.agodlin.strengthlog.ui.weight.WeightActivity;
 
@@ -86,14 +87,15 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.exercises) {
+        } else if (id == R.id.exercises_name) {
             Intent intent = new Intent(this, ExerciseNameActivity.class);
             startActivity(intent);
         } else if (id == R.id.weight) {
             Intent intent = new Intent(this, WeightActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.exercise) {
+            Intent intent = new Intent(this, ExerciseActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

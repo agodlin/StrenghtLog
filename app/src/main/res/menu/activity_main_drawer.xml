@@ -7,17 +7,17 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Import" />
         <item
-            android:id="@+id/exercises"
+            android:id="@+id/exercises_name"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Exercises" />
+            android:title="ExercisesName" />
         <item
             android:id="@+id/weight"
             android:icon="@drawable/ic_menu_gallery"
             android:title="weight" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/exercise"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Exercise" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
