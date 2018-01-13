@@ -14,7 +14,7 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.example.agodlin.strenghtlog.ui.exercise.ExerciseFragment"
-    tools:listitem="@layout/fragment_exercise" />
+    tools:listitem="@layout/fragment_exercise_name" />
 
 <android.support.design.widget.FloatingActionButton
 android:id="@+id/add_exercise_button"

@@ -1,4 +1,4 @@
-package com.example.agodlin.strengthlog.ui.exercise;
+package com.example.agodlin.strengthlog.ui.exercise_name;
 
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -6,12 +6,12 @@ import android.os.Bundle;
 
 import com.example.agodlin.strengthlog.R;
 
-public class ExerciseActivity extends AppCompatActivity implements ExerciseFragment.OnListFragmentInteractionListener {
+public class ExerciseNameActivity extends AppCompatActivity implements ExerciseNameFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise);
+        setContentView(R.layout.activity_exercise_name);
 
         if (findViewById(R.id.fragment_container) != null) {
 
@@ -23,7 +23,7 @@ public class ExerciseActivity extends AppCompatActivity implements ExerciseFragm
             }
 
             // Create a new Fragment to be placed in the activity layout
-            ExerciseFragment firstFragment = new ExerciseFragment();
+            ExerciseNameFragment firstFragment = new ExerciseNameFragment();
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -36,7 +36,7 @@ public class ExerciseActivity extends AppCompatActivity implements ExerciseFragm
     }
 
     @Override
-    public void onListFragmentInteraction(ExerciseContent.ExerciseItem item) {
+    public void onListFragmentInteraction(ExerciseNameContent.ExerciseItem item) {
         Snackbar.make(getWindow().getDecorView().getRootView(), "Pressed : " + item.toString(), Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
     }

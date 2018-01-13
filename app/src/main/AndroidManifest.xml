@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.exercise.ExerciseActivity" />
+        <activity android:name=".ui.exercise_name.ExerciseNameActivity" />
         <activity
             android:name=".ui.weight.WeightActivity"
             android:label="@string/title_activity_weight"

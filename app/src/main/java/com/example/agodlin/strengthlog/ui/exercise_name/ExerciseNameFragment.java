@@ -1,4 +1,4 @@
-package com.example.agodlin.strengthlog.ui.exercise;
+package com.example.agodlin.strengthlog.ui.exercise_name;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -29,8 +29,8 @@ import com.example.agodlin.strengthlog.R;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ExerciseFragment extends Fragment {
-    private static final String TAG = "ExerciseFragment";
+public class ExerciseNameFragment extends Fragment {
+    private static final String TAG = "ExerciseNameFragment";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -41,13 +41,13 @@ public class ExerciseFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExerciseFragment() {
+    public ExerciseNameFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ExerciseFragment newInstance(int columnCount) {
-        ExerciseFragment fragment = new ExerciseFragment();
+    public static ExerciseNameFragment newInstance(int columnCount) {
+        ExerciseNameFragment fragment = new ExerciseNameFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -66,7 +66,7 @@ public class ExerciseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exercise_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_exercise_name_list, container, false);
 
         setUpRecyclerView(view);
 
@@ -87,8 +87,8 @@ public class ExerciseFragment extends Fragment {
                                     return;
                                 }
                                 Log.d(TAG, "Text set To : " + name);
-                                ExerciseContent.ITEMS.add(new ExerciseContent.ExerciseItem(ExerciseContent.ITEMS.size()+1, name, ""));
-                                mRecyclerView.getAdapter().notifyItemInserted(ExerciseContent.ITEMS.size()-1);
+                                ExerciseNameContent.ITEMS.add(new ExerciseNameContent.ExerciseItem(ExerciseNameContent.ITEMS.size()+1, name, ""));
+                                mRecyclerView.getAdapter().notifyItemInserted(ExerciseNameContent.ITEMS.size()-1);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -106,7 +106,7 @@ public class ExerciseFragment extends Fragment {
     private void setUpRecyclerView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        mRecyclerView.setAdapter(new ExerciseRecyclerViewAdapter(ExerciseContent.ITEMS, mListener));
+        mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(ExerciseNameContent.ITEMS, mListener));
         mRecyclerView.setHasFixedSize(true);
         setUpItemTouchHelper();
         setUpAnimationDecoratorHelper();
@@ -139,7 +139,7 @@ public class ExerciseFragment extends Fragment {
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 int position = viewHolder.getAdapterPosition();
-                ExerciseRecyclerViewAdapter testAdapter = (ExerciseRecyclerViewAdapter)recyclerView.getAdapter();
+                ExerciseNameRecyclerViewAdapter testAdapter = (ExerciseNameRecyclerViewAdapter)recyclerView.getAdapter();
                 if (testAdapter.isUndoOn() && testAdapter.isPendingRemoval(position)) {
                     return 0;
                 }
@@ -149,7 +149,7 @@ public class ExerciseFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int swipedPosition = viewHolder.getAdapterPosition();
-                ExerciseRecyclerViewAdapter adapter = (ExerciseRecyclerViewAdapter)mRecyclerView.getAdapter();
+                ExerciseNameRecyclerViewAdapter adapter = (ExerciseNameRecyclerViewAdapter)mRecyclerView.getAdapter();
                 boolean undoOn = adapter.isUndoOn();
                 if (undoOn) {
                     adapter.pendingRemoval(swipedPosition);
@@ -310,7 +310,7 @@ public class ExerciseFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(ExerciseContent.ExerciseItem item);
+        void onListFragmentInteraction(ExerciseNameContent.ExerciseItem item);
     }
 
 }

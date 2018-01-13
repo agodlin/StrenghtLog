@@ -1,9 +1,7 @@
-package com.example.agodlin.strengthlog.ui.exercise;
+package com.example.agodlin.strengthlog.ui.exercise_name;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -11,7 +9,7 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class ExerciseContent {
+public class ExerciseNameContent {
 
     /**
      * An array of sample (dummy) mItems.

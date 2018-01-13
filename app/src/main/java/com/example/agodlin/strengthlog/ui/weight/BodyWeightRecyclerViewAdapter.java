@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseRecyclerViewAdapter;
 import com.example.agodlin.strengthlog.ui.weight.BodyWeightFragment.OnListFragmentInteractionListener;
 import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent.BodyWeightItem;
 import com.example.agodlin.strengthlog.R;
@@ -17,12 +16,12 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyBodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<MyBodyWeightRecyclerViewAdapter.ViewHolder> {
+public class BodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<BodyWeightRecyclerViewAdapter.ViewHolder> {
 
     private final List<BodyWeightItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyBodyWeightRecyclerViewAdapter(List<BodyWeightItem> items, OnListFragmentInteractionListener listener) {
+    public BodyWeightRecyclerViewAdapter(List<BodyWeightItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
