@@ -1,6 +1,8 @@
 package com.example.agodlin.strengthlog.ui.exercise;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment.OnListFragmentInteractionListener;
+import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent;
 import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +26,9 @@ import java.util.List;
  */
 public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
     public ExerciseRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
         mListener = listener;
     }
 
@@ -33,22 +36,21 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_exercise, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, parent.getContext());
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.personName.setText(mValues.get(position).id);
-        holder.personAge.setText(mValues.get(position).content);
-
-        holder.cv.setOnClickListener(new View.OnClickListener() {
+        List<String> tmp = new ArrayList<String>(DataManager.ITEM_MAP.keySet());
+        String name = tmp.get(position);
+        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(DataManager.ITEM_MAP.get(name), mListener));
+        holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+
                 }
             }
         });
@@ -56,25 +58,21 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return DataManager.ITEM_MAP.keySet().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final CardView cv;
-        public final TextView personName;
-        public final TextView personAge;
-        public DummyItem mItem;
+        public final RecyclerView recyclerView;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, Context context) {
             super(view);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            personName = (TextView)itemView.findViewById(R.id.person_name);
-            personAge = (TextView)itemView.findViewById(R.id.person_age);
+            recyclerView = (RecyclerView)itemView.findViewById(R.id.list);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + personName.getText() + "'";
+            return super.toString() ;
         }
     }
 }
