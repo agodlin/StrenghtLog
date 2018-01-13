@@ -38,7 +38,7 @@ public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<Exerci
     @Override
     public void onBindViewHolder(final ExerciseCardRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.name.setText(mValues.get(position).name);
+        holder.name.setText("tmp");
         holder.age.setText(mValues.get(position).date.toString());
     }
 

@@ -1,9 +1,11 @@
 package com.example.agodlin.strengthlog.ui.exercise;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import java.util.List;
  * TODO: Replace the implementation with code for your data type.
  */
 public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRecyclerViewAdapter.ViewHolder> {
+    private static final String TAG = "ExerciseAdapter";
 
     private final OnListFragmentInteractionListener mListener;
 
@@ -43,6 +46,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
     public void onBindViewHolder(final ViewHolder holder, int position) {
         List<String> tmp = new ArrayList<String>(DataManager.ITEM_MAP.keySet());
         String name = tmp.get(position);
+        holder.header.setText(name);
         holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(DataManager.ITEM_MAP.get(name), mListener));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +58,13 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                 }
             }
         });
+        holder.header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView textView = (TextView)v;
+                Log.i(TAG, "pressed " + textView.getText());
+            }
+        });
     }
 
     @Override
@@ -63,10 +74,11 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final RecyclerView recyclerView;
-
+        public final TextView header;
         public ViewHolder(View view, Context context) {
             super(view);
             recyclerView = (RecyclerView)itemView.findViewById(R.id.list);
+            header = (TextView)itemView.findViewById(R.id.card_header);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         }
 
