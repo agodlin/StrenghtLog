@@ -1,6 +1,7 @@
 package com.example.agodlin.strengthlog.ui.exercise;
 
 import android.content.Context;
+import android.media.Image;
 import android.nfc.Tag;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,7 +65,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
             @Override
             public void onClick(View v) {
                 TextView textView = (TextView)v;
-                Log.i(TAG, "pressed " + textView.getText());
+                Log.i(TAG, "header pressed " + textView.getText());
             }
         });
 
@@ -71,7 +73,14 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
             @Override
             public void onClick(View v) {
                 TextView textView = (TextView)v;
-                Log.i(TAG, "pressed " + textView.getText());
+                Log.i(TAG, "footer pressed " + textView.getText());
+            }
+        });
+
+        holder.imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "ImageButton pressed ");
             }
         });
     }
@@ -85,11 +94,13 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         public final RecyclerView recyclerView;
         public final TextView header;
         public final TextView footer;
+        public final ImageButton imageButton;
         public ViewHolder(View view, Context context) {
             super(view);
             recyclerView = (RecyclerView)itemView.findViewById(R.id.list);
             header = (TextView)itemView.findViewById(R.id.card_header);
             footer = (TextView)itemView.findViewById(R.id.card_footer);
+            imageButton = (ImageButton) itemView.findViewById(R.id.card_menu);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         }
 
