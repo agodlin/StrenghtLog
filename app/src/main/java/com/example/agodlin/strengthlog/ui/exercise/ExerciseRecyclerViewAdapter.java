@@ -47,6 +47,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         List<String> tmp = new ArrayList<String>(DataManager.ITEM_MAP.keySet());
         String name = tmp.get(position);
         holder.header.setText(name);
+        holder.footer.setText("comment");
         holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(DataManager.ITEM_MAP.get(name), mListener));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +66,14 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                 Log.i(TAG, "pressed " + textView.getText());
             }
         });
+
+        holder.footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView textView = (TextView)v;
+                Log.i(TAG, "pressed " + textView.getText());
+            }
+        });
     }
 
     @Override
@@ -75,10 +84,12 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final RecyclerView recyclerView;
         public final TextView header;
+        public final TextView footer;
         public ViewHolder(View view, Context context) {
             super(view);
             recyclerView = (RecyclerView)itemView.findViewById(R.id.list);
             header = (TextView)itemView.findViewById(R.id.card_header);
+            footer = (TextView)itemView.findViewById(R.id.card_footer);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         }
 

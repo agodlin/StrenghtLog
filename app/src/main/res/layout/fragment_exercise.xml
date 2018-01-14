@@ -30,6 +30,10 @@
             app:layoutManager="LinearLayoutManager"
             tools:context="com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment"
             tools:listitem="@layout/exercise_cardview_item" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/card_footer" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
