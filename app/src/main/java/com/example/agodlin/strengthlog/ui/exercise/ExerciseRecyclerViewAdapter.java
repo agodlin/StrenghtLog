@@ -53,11 +53,11 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        List<String> tmp = new ArrayList<String>(DataManager.ITEM_MAP.keySet());
+        List<String> tmp = new ArrayList<String>(DataManager.exercises.keySet());
         String name = tmp.get(position);
         holder.header.setText(name);
         holder.footer.setText("comment");
-        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(DataManager.ITEM_MAP.get(name), mListener));
+        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(DataManager.exercises.get(name), mListener));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,8 +102,8 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                                 }
                                 Log.d(TAG, "Text set To : " + name);
                                 Exercise exercise = new Exercise(name, new Date(1,1,1), new ArrayList<Set>());
-                                DataManager.ITEM_MAP.get(holder.header.getText()).add(exercise);
-                                holder.recyclerView.getAdapter().notifyItemInserted(DataManager.ITEM_MAP.get(holder.header.getText()).size()-1);
+                                DataManager.exercises.get(holder.header.getText()).add(exercise);
+                                holder.recyclerView.getAdapter().notifyItemInserted(DataManager.exercises.get(holder.header.getText()).size()-1);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -118,7 +118,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
     @Override
     public int getItemCount() {
-        return DataManager.ITEM_MAP.keySet().size();
+        return DataManager.exercises.keySet().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

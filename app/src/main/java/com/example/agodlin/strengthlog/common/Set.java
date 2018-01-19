@@ -6,9 +6,9 @@ package com.example.agodlin.strengthlog.common;
 
 public class Set {
     public int reps;
-    public float weight;
+    public double weight;
 
-    public Set(int reps, float weight) {
+    public Set(int reps, double weight) {
         this.reps = reps;
         this.weight = weight;
     }

@@ -15,21 +15,13 @@ import java.util.Map;
  */
 
 public class DataManager {
-    public static final Map<String, List<Exercise>> ITEM_MAP = new HashMap<String, List<Exercise>>();
+    public static Map<Date, List<Exercise>> workouts = new HashMap<>();
+    public static Map<String, List<Exercise>> exercises = new HashMap<>();
 
-    static {
-        addItem("squat");
-        addItem("bench");
-        addItem("deadlift");
-    }
-
-    static void addItem(String name)
+    public static void init()
     {
-        List<Exercise> exerciseList = new ArrayList<>();
-        exerciseList.add(new Exercise(name, new Date(1,1,2018), Arrays.asList(new Set(5, 80), new Set(5, 90))));
-        exerciseList.add(new Exercise(name, new Date(3,1,2018), Arrays.asList(new Set(5, 85), new Set(5, 95))));
-        exerciseList.add(new Exercise(name, new Date(5,1,2018), Arrays.asList(new Set(5, 90), new Set(5, 100))));
-
-        ITEM_MAP.put(name, exerciseList);
+        DummyData.init();
+        workouts = DummyData.workouts;
+        exercises = DummyData.exercises;
     }
 }
