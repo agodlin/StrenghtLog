@@ -2,10 +2,8 @@ package com.example.agodlin.strengthlog.db;
 
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
-import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.ui.exercise_name.ExerciseNameContent;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,5 +21,6 @@ public class DataManager {
         DummyData.init();
         workouts = DummyData.workouts;
         exercises = DummyData.exercises;
+        ExerciseNameContent.setItems(exercises.keySet());
     }
 }

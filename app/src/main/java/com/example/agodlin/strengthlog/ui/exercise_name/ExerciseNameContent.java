@@ -2,6 +2,7 @@ package com.example.agodlin.strengthlog.ui.exercise_name;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -15,6 +16,16 @@ public class ExerciseNameContent {
      * An array of sample (dummy) mItems.
      */
     public static final List<ExerciseItem> ITEMS = new ArrayList<ExerciseItem>();
+
+    public static void setItems(Set<String> names)
+    {
+        int i =0;
+        for(String name : names)
+        {
+            ExerciseItem exerciseItem = new ExerciseItem(i++, name, name);
+            ITEMS.add(exerciseItem);
+        }
+    }
 
     /**
      * A dummy item representing a piece of content.
