@@ -39,9 +39,12 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
     private static final String TAG = "ExerciseAdapter";
 
     private final OnListFragmentInteractionListener mListener;
-
-    public ExerciseRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    private String exercise;
+    List<Exercise> tmp;
+    public ExerciseRecyclerViewAdapter(String exercise, OnListFragmentInteractionListener listener) {
         mListener = listener;
+        this.exercise = exercise;
+        tmp = new ArrayList<Exercise>(DataManager.exercises.get(exercise));
     }
 
     @Override
@@ -53,11 +56,11 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        List<String> tmp = new ArrayList<String>(DataManager.exercises.keySet());
-        String name = tmp.get(position);
-        holder.header.setText(name);
+
+        Exercise exerciseDay = tmp.get(position);
+        holder.header.setText(exerciseDay.date.toString());
         holder.footer.setText("comment");
-        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(DataManager.exercises.get(name), mListener));
+        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets, mListener));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +121,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
     @Override
     public int getItemCount() {
-        return DataManager.exercises.keySet().size();
+        return tmp.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

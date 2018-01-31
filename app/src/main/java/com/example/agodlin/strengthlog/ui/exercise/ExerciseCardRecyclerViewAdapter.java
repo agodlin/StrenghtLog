@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Exercise;
+import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent;
 
 import java.util.List;
@@ -20,10 +21,10 @@ import java.util.List;
 
 public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseCardRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Exercise> mValues;
+    private final List<Set> mValues;
     private final ExerciseFragment.OnListFragmentInteractionListener mListener;
 
-    public ExerciseCardRecyclerViewAdapter(List<Exercise> items, ExerciseFragment.OnListFragmentInteractionListener listener) {
+    public ExerciseCardRecyclerViewAdapter(List<Set> items, ExerciseFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -39,7 +40,7 @@ public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<Exerci
     public void onBindViewHolder(final ExerciseCardRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.name.setText("tmp");
-        holder.age.setText(mValues.get(position).date.toString());
+        holder.age.setText(mValues.get(position).toString());
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<Exerci
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView name;
         public final TextView age;
-        public Exercise mItem;
+        public Set mItem;
         public ViewHolder(View view, Context context) {
             super(view);
             name = (TextView)itemView.findViewById(R.id.person_name);

@@ -12,4 +12,10 @@ public class Set {
         this.reps = reps;
         this.weight = weight;
     }
+
+    @Override
+    public String toString() {
+        return "reps=" + reps +
+                ", weight=" + weight;
+    }
 }

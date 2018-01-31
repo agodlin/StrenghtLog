@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent;
 import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent.DummyItem;
 
@@ -70,7 +71,7 @@ public class ExerciseFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(DataManager.exercises.keySet().iterator().next(), mListener));
         }
         return view;
     }
