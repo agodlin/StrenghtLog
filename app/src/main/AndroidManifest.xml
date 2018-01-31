@@ -32,7 +32,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.agodlin.strengthlog.MainActivity" />
         </activity>
-        <activity android:name=".ui.exercise.ExerciseActivity"></activity>
+        <activity android:name=".ui.exercise.ExerciseActivity" />
+        <activity android:name=".ui.workout.WorkoutActivity"></activity>
     </application>
 
 </manifest>
