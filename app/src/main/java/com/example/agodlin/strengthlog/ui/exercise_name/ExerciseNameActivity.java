@@ -1,10 +1,14 @@
 package com.example.agodlin.strengthlog.ui.exercise_name;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.common.Exercise;
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseActivity;
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment;
 
 public class ExerciseNameActivity extends AppCompatActivity implements ExerciseNameFragment.OnListFragmentInteractionListener {
 
@@ -36,8 +40,11 @@ public class ExerciseNameActivity extends AppCompatActivity implements ExerciseN
     }
 
     @Override
-    public void onListFragmentInteraction(ExerciseNameContent.ExerciseItem item) {
-        Snackbar.make(getWindow().getDecorView().getRootView(), "Pressed : " + item.toString(), Snackbar.LENGTH_SHORT)
+    public void onListFragmentInteraction(String item) {
+        Snackbar.make(getWindow().getDecorView().getRootView(), "Pressed : " + item, Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
+        Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra(ExerciseFragment.ARG_EXERCISE_NAME,item);
+        startActivity(intent);
     }
 }

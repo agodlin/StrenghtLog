@@ -87,7 +87,7 @@ public class ExerciseNameFragment extends Fragment {
                                     return;
                                 }
                                 Log.d(TAG, "Text set To : " + name);
-                                ExerciseNameContent.ITEMS.add(new ExerciseNameContent.ExerciseItem(ExerciseNameContent.ITEMS.size()+1, name, ""));
+                                ExerciseNameContent.ITEMS.add(name);
                                 mRecyclerView.getAdapter().notifyItemInserted(ExerciseNameContent.ITEMS.size()-1);
                             }
                         })
@@ -310,7 +310,7 @@ public class ExerciseNameFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(ExerciseNameContent.ExerciseItem item);
+        void onListFragmentInteraction(String item);
     }
 
 }

@@ -41,10 +41,9 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
     private final OnListFragmentInteractionListener mListener;
     private String exercise;
     List<Exercise> tmp;
-    public ExerciseRecyclerViewAdapter(String exercise, OnListFragmentInteractionListener listener) {
+    public ExerciseRecyclerViewAdapter(List<Exercise> exercises, OnListFragmentInteractionListener listener) {
         mListener = listener;
-        this.exercise = exercise;
-        tmp = new ArrayList<Exercise>(DataManager.exercises.get(exercise));
+        this.tmp = exercises;
     }
 
     @Override

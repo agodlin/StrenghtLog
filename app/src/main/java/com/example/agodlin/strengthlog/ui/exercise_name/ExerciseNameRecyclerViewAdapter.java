@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link ExerciseNameContent.ExerciseItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link String} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
     * https://github.com/nemanja-kovacevic/recycler-view-swipe-to-delete/
@@ -27,15 +27,15 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private static final int PENDING_REMOVAL_TIMEOUT = 3000; // 3sec
     private final OnListFragmentInteractionListener mListener;
-    List<ExerciseNameContent.ExerciseItem> mItems;
-    List<ExerciseNameContent.ExerciseItem> itemsPendingRemoval;
+    List<String> mItems;
+    List<String> itemsPendingRemoval;
     int lastInsertedIndex; // so we can add some more mItems for testing purposes
     boolean undoOn; // is undo on, you can turn it on from the toolbar menu
 
     private Handler handler = new Handler(); // hanlder for running delayed runnables
-    HashMap<ExerciseNameContent.ExerciseItem, Runnable> pendingRunnables = new HashMap<>(); // map of mItems to pending runnables, so we can cancel a removal if need be
+    HashMap<String, Runnable> pendingRunnables = new HashMap<>(); // map of mItems to pending runnables, so we can cancel a removal if need be
 
-    public ExerciseNameRecyclerViewAdapter(List<ExerciseNameContent.ExerciseItem> items, OnListFragmentInteractionListener listener) {
+    public ExerciseNameRecyclerViewAdapter(List<String> items, OnListFragmentInteractionListener listener) {
         mItems = items;
         itemsPendingRemoval = new ArrayList<>();
         mListener = listener;
@@ -49,8 +49,17 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TestViewHolder viewHolder = (TestViewHolder)holder;
-        final ExerciseNameContent.ExerciseItem item = mItems.get(position);
-
+        final String item = mItems.get(position);
+        viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onListFragmentInteraction(item);
+                }
+            }
+        });
         if (itemsPendingRemoval.contains(item)) {
             // we need to show the "undo" state of the row
             viewHolder.itemView.setBackgroundColor(Color.RED);
@@ -72,7 +81,7 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
             // we need to show the "normal" state
             viewHolder.itemView.setBackgroundColor(Color.WHITE);
             viewHolder.titleTextView.setVisibility(View.VISIBLE);
-            viewHolder.titleTextView.setText(item.toString());
+            viewHolder.titleTextView.setText(item);
             viewHolder.undoButton.setVisibility(View.GONE);
             viewHolder.undoButton.setOnClickListener(null);
         }
@@ -105,7 +114,7 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void pendingRemoval(int position) {
-        final ExerciseNameContent.ExerciseItem item = mItems.get(position);
+        final String item = mItems.get(position);
         if (!itemsPendingRemoval.contains(item)) {
             itemsPendingRemoval.add(item);
             // this will redraw row in "undo" state
@@ -123,7 +132,7 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void remove(int position) {
-        ExerciseNameContent.ExerciseItem item = mItems.get(position);
+        String item = mItems.get(position);
         if (itemsPendingRemoval.contains(item)) {
             itemsPendingRemoval.remove(item);
         }
@@ -134,7 +143,7 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public boolean isPendingRemoval(int position) {
-        ExerciseNameContent.ExerciseItem item = mItems.get(position);
+        String item = mItems.get(position);
         return itemsPendingRemoval.contains(item);
     }
 
