@@ -91,16 +91,13 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.exercises_name) {
-            Intent intent = new Intent(this, ExerciseNameActivity.class);
-            startActivity(intent);
         } else if (id == R.id.weight) {
             Intent intent = new Intent(this, WeightActivity.class);
             startActivity(intent);
-        } else if (id == R.id.exercise) {
-            Intent intent = new Intent(this, ExerciseActivity.class);
+        } else if (id == R.id.exercises) {
+            Intent intent = new Intent(this, ExerciseNameActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.workout) {
             Intent intent = new Intent(this, WorkoutActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
