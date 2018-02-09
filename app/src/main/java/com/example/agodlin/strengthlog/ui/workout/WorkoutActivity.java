@@ -4,10 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment;
 import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent;
 
-public class WorkoutActivity extends AppCompatActivity implements WorkoutFragment.OnListFragmentInteractionListener{
+public class WorkoutActivity extends AppCompatActivity implements WorkoutFragment.OnListFragmentInteractionListener, WorkoutsFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class WorkoutActivity extends AppCompatActivity implements WorkoutFragmen
             }
 
             // Create a new Fragment to be placed in the activity layout
-            WorkoutFragment firstFragment = new WorkoutFragment();
+            WorkoutsFragment firstFragment = new WorkoutsFragment();
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -39,5 +40,19 @@ public class WorkoutActivity extends AppCompatActivity implements WorkoutFragmen
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
+    }
+
+    @Override
+    public void onListFragmentInteraction(Date item) {
+        WorkoutFragment firstFragment = new WorkoutFragment();
+
+        // In case this activity was started with special instructions from an
+        // Intent, pass the Intent's extras to the fragment as arguments
+        getIntent().putExtra(WorkoutFragment.ARG_WORKOUT_DATE, item);
+        firstFragment.setArguments(getIntent().getExtras());
+
+        // Add the fragment to the 'fragment_container' FrameLayout
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, firstFragment).commit();
     }
 }

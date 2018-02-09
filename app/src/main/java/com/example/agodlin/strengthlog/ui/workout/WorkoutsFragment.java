@@ -9,18 +9,23 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseRecyclerViewAdapter;
+import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
 import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent;
 import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -29,25 +34,26 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class WorkoutFragment extends Fragment {
-    public static final String ARG_WORKOUT_DATE = "workout-date";
+public class WorkoutsFragment extends Fragment {
+    private static final String TAG = "WorkoutsFragment";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    Date date;
+    List<Date> mItems;
+    RecyclerView recyclerView;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public WorkoutFragment() {
+    public WorkoutsFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static WorkoutFragment newInstance(int columnCount) {
-        WorkoutFragment fragment = new WorkoutFragment();
+    public static WorkoutsFragment newInstance(int columnCount) {
+        WorkoutsFragment fragment = new WorkoutsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -60,15 +66,15 @@ public class WorkoutFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            date = (Date)getArguments().getSerializable(ARG_WORKOUT_DATE);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mItems = new ArrayList<Date>(DataManager.workouts.keySet());
         View view = inflater.inflate(R.layout.fragment_exercise_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
         if (mColumnCount <= 1) {
@@ -76,31 +82,55 @@ public class WorkoutFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new WorkoutItemRecyclerViewAdapter(date, mListener));
+        Date date = new Date(10,12,2017);
+        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(mItems, mListener));
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                final EditText input = new EditText(getActivity());
-                builder.setView(input);
-                builder.setTitle(R.string.insert_exercise_name)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                view = inflater.inflate(R.layout.date_picker, null, false);
+                final DatePicker myDatePicker = (DatePicker) view.findViewById(R.id.myDatePicker);
+
+                // so that the calendar view won't appear
+                myDatePicker.setCalendarViewShown(false);
+                // the alert dialog
+                new AlertDialog.Builder(getActivity()).setView(view)
+                        .setTitle("Set Date")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                String name = input.getText().toString();
-                                if (name.isEmpty())
+                                int month = myDatePicker.getMonth() + 1;
+                                int day = myDatePicker.getDayOfMonth();
+                                int year = myDatePicker.getYear();
+                                Date date = new Date(day, month, year);
+                                DataManager.addNewWorkout(date);
+
+                                Comparator<Date> c = new Comparator<Date>()
                                 {
-                                    return;
+                                    public int compare(Date u1, Date u2)
+                                    {
+                                        return u1.compareTo(u2);
+                                    }
+                                };
+                                int position = Collections.binarySearch(mItems, date, c);
+                                if (position < 0) {
+                                    Log.d(TAG, "Date insert position : " + position + " value : " + date.toString());
+                                    position = position * -1 - 1;
+                                    mItems.add(position, date);
+                                    recyclerView.getAdapter().notifyItemInserted(position);
                                 }
+
+                                Log.d(TAG, "date value : " + date.toString());
+                                dialog.cancel();
                             }
+
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
-                        });
-                builder.show();
+                        }).show();
             }
         });
         return view;
@@ -136,6 +166,6 @@ public class WorkoutFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Date item);
     }
 }

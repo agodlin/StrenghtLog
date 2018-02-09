@@ -2,11 +2,13 @@ package com.example.agodlin.strengthlog.common;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Created by agodlin on 1/5/2018.
  */
 
-public class Date implements Comparable {
+public class Date implements Comparable,Serializable {
     private int day;
     private int month;
     private int year;

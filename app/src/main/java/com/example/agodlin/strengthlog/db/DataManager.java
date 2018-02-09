@@ -29,4 +29,9 @@ public class DataManager {
     {
         exercises.put(exerciseName, new ArrayList<Exercise>());
     }
+
+    static public void addNewWorkout(Date date)
+    {
+        workouts.put(date, new ArrayList<Exercise>());
+    }
 }
