@@ -4,6 +4,7 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.ui.exercise_name.ExerciseNameContent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,5 +23,10 @@ public class DataManager {
         workouts = DummyData.workouts;
         exercises = DummyData.exercises;
         ExerciseNameContent.setItems(exercises.keySet());
+    }
+
+    static public void addNewExercise(String exerciseName)
+    {
+        exercises.put(exerciseName, new ArrayList<Exercise>());
     }
 }

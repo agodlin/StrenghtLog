@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.db.DataManager;
 
 /**
  * A fragment representing a list of Items.
@@ -89,6 +90,7 @@ public class ExerciseNameFragment extends Fragment {
                                 Log.d(TAG, "Text set To : " + name);
                                 ExerciseNameContent.ITEMS.add(name);
                                 mRecyclerView.getAdapter().notifyItemInserted(ExerciseNameContent.ITEMS.size()-1);
+                                DataManager.addNewExercise(name);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
