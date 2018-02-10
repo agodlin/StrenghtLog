@@ -28,7 +28,7 @@ public class WorkoutCardRecyclerViewAdapter extends RecyclerView.Adapter<Workout
     @Override
     public WorkoutCardRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.exercise_cardview_item, parent, false);
+                .inflate(R.layout.exercise_cardview_list_item, parent, false);
         return new WorkoutCardRecyclerViewAdapter.ViewHolder(view, parent.getContext());
     }
 
