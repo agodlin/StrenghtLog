@@ -73,6 +73,14 @@ public class WorkoutsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mItems = new ArrayList<Date>(DataManager.workouts.keySet());
+        Comparator<Date> c = new Comparator<Date>()
+        {
+            public int compare(Date u1, Date u2)
+            {
+                return u1.compareTo(u2);
+            }
+        };
+        Collections.sort(mItems, c);
         View view = inflater.inflate(R.layout.fragment_exercise_list, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter

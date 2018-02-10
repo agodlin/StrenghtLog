@@ -1,5 +1,6 @@
 package com.example.agodlin.strengthlog.ui.workout;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -44,7 +45,7 @@ public class WorkoutActivity extends AppCompatActivity implements WorkoutFragmen
 
     @Override
     public void onListFragmentInteraction(Date item) {
-        WorkoutFragment firstFragment = new WorkoutFragment();
+        Fragment firstFragment = new WorkoutFragment();
 
         // In case this activity was started with special instructions from an
         // Intent, pass the Intent's extras to the fragment as arguments
@@ -53,6 +54,6 @@ public class WorkoutActivity extends AppCompatActivity implements WorkoutFragmen
 
         // Add the fragment to the 'fragment_container' FrameLayout
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, firstFragment).commit();
+                .replace(R.id.fragment_container, firstFragment).addToBackStack(null).commit();
     }
 }
