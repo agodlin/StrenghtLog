@@ -14,15 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.EditText;
-
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
-import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent;
-import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent.DummyItem;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,6 +61,7 @@ public class WorkoutsFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        getActivity().setTitle("Workouts");
     }
 
     @Override

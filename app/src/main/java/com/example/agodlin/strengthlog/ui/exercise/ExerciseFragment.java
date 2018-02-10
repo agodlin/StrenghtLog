@@ -9,19 +9,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent;
-import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent.DummyItem;
-import com.example.agodlin.strengthlog.ui.exercise_name.ExerciseNameContent;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -62,6 +57,7 @@ public class ExerciseFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
             exerciseName = getArguments().getString(ARG_EXERCISE_NAME);
         }
+        getActivity().setTitle(exerciseName);
     }
 
     @Override
@@ -137,6 +133,6 @@ public class ExerciseFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Exercise item);
     }
 }

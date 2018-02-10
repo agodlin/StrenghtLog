@@ -1,4 +1,4 @@
-package com.example.agodlin.strengthlog.ui.exercise_name;
+package com.example.agodlin.strengthlog.ui.exercises;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,31 +24,35 @@ import android.widget.EditText;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.db.DataManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ExerciseNameFragment extends Fragment {
-    private static final String TAG = "ExerciseNameFragment";
+public class ExercisesFragment extends Fragment {
+    private static final String TAG = "ExercisesFragment";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     RecyclerView mRecyclerView;
+    List<String> items;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExerciseNameFragment() {
+    public ExercisesFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ExerciseNameFragment newInstance(int columnCount) {
-        ExerciseNameFragment fragment = new ExerciseNameFragment();
+    public static ExercisesFragment newInstance(int columnCount) {
+        ExercisesFragment fragment = new ExercisesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -62,14 +66,21 @@ public class ExerciseNameFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        getActivity().setTitle("Exercises");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_name_list, container, false);
+        items = new ArrayList<>(DataManager.exercises.keySet());
 
-        setUpRecyclerView(view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(items, mListener));
+        mRecyclerView.setHasFixedSize(true);
+        setUpItemTouchHelper();
+        setUpAnimationDecoratorHelper();
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,8 +99,9 @@ public class ExerciseNameFragment extends Fragment {
                                     return;
                                 }
                                 Log.d(TAG, "Text set To : " + name);
-                                ExerciseNameContent.ITEMS.add(name);
-                                mRecyclerView.getAdapter().notifyItemInserted(ExerciseNameContent.ITEMS.size()-1);
+                                DataManager.addNewExercise(name);
+                                items.add(name);
+                                mRecyclerView.getAdapter().notifyItemInserted(items.size()-1);
                                 DataManager.addNewExercise(name);
                             }
                         })
@@ -103,15 +115,6 @@ public class ExerciseNameFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private void setUpRecyclerView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(ExerciseNameContent.ITEMS, mListener));
-        mRecyclerView.setHasFixedSize(true);
-        setUpItemTouchHelper();
-        setUpAnimationDecoratorHelper();
     }
 
     private void setUpItemTouchHelper() {

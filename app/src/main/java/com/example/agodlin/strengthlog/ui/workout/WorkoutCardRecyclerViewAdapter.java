@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Set;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseCardRecyclerViewAdapter;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment;
 
 import java.util.List;
 
@@ -37,8 +35,7 @@ public class WorkoutCardRecyclerViewAdapter extends RecyclerView.Adapter<Workout
     @Override
     public void onBindViewHolder(WorkoutCardRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.name.setText("tmp");
-        holder.age.setText(mValues.get(position).toString());
+        holder.setInfo.setText(mValues.get(position).toString());
 
     }
 
@@ -48,13 +45,11 @@ public class WorkoutCardRecyclerViewAdapter extends RecyclerView.Adapter<Workout
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView name;
-        public final TextView age;
+        public final TextView setInfo;
         public Set mItem;
         public ViewHolder(View view, Context context) {
             super(view);
-            name = (TextView)itemView.findViewById(R.id.person_name);
-            age = (TextView)itemView.findViewById(R.id.person_age);
+            setInfo = (TextView)itemView.findViewById(R.id.set_info);
         }
 
         @Override

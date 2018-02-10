@@ -16,10 +16,7 @@ import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
-import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseRecyclerViewAdapter;
-import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent;
-import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent.DummyItem;
+import com.example.agodlin.strengthlog.common.Exercise;
 
 import java.util.List;
 
@@ -62,6 +59,7 @@ public class WorkoutFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
             date = (Date)getArguments().getSerializable(ARG_WORKOUT_DATE);
         }
+        getActivity().setTitle(date.toString());
     }
 
     @Override
@@ -136,6 +134,6 @@ public class WorkoutFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Exercise item);
     }
 }

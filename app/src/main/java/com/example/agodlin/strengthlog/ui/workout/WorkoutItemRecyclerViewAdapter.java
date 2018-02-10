@@ -18,15 +18,13 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseCardRecyclerViewAdapter;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutFragment.OnListFragmentInteractionListener;
-import com.example.agodlin.strengthlog.ui.workout.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Exercise} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
@@ -49,7 +47,7 @@ public class WorkoutItemRecyclerViewAdapter extends RecyclerView.Adapter<Workout
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Exercise exerciseDay = tmp.get(position);
-        holder.header.setText(exerciseDay.date.toString());
+        holder.header.setText(exerciseDay.name);
         holder.footer.setText("comment");
         holder.recyclerView.setAdapter(new WorkoutCardRecyclerViewAdapter(exerciseDay.sets, mListener));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {

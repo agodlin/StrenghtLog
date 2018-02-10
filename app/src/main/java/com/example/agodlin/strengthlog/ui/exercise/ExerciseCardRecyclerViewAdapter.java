@@ -1,17 +1,13 @@
 package com.example.agodlin.strengthlog.ui.exercise;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.agodlin.strengthlog.R;
-import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
-import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent;
 
 import java.util.List;
 
@@ -39,8 +35,7 @@ public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<Exerci
     @Override
     public void onBindViewHolder(final ExerciseCardRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.name.setText("tmp");
-        holder.age.setText(mValues.get(position).toString());
+        holder.setInfo.setText(mValues.get(position).toString());
     }
 
     @Override
@@ -49,13 +44,11 @@ public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<Exerci
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView name;
-        public final TextView age;
+        public final TextView setInfo;
         public Set mItem;
         public ViewHolder(View view, Context context) {
             super(view);
-            name = (TextView)itemView.findViewById(R.id.person_name);
-            age = (TextView)itemView.findViewById(R.id.person_age);
+            setInfo = (TextView)itemView.findViewById(R.id.set_info);
         }
 
         @Override

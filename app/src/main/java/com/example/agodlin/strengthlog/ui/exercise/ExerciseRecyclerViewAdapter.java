@@ -3,9 +3,6 @@ package com.example.agodlin.strengthlog.ui.exercise;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Image;
-import android.nfc.Tag;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
@@ -23,15 +19,12 @@ import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment.OnListFragmentInteractionListener;
-import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent;
-import com.example.agodlin.strengthlog.ui.exercise.dummy.DummyContent.DummyItem;
-import com.example.agodlin.strengthlog.ui.exercise_name.ExerciseNameContent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Exercise} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */

@@ -66,6 +66,7 @@ public class BodyWeightFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        getActivity().setTitle("Body Weight");
         setHasOptionsMenu(true);
     }
 

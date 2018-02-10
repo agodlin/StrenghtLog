@@ -1,4 +1,4 @@
-package com.example.agodlin.strengthlog.ui.exercise_name;
+package com.example.agodlin.strengthlog.ui.exercises;
 
 import android.graphics.Color;
 import android.os.Handler;
@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
-import com.example.agodlin.strengthlog.ui.exercise_name.ExerciseNameFragment.OnListFragmentInteractionListener;
+import com.example.agodlin.strengthlog.ui.exercises.ExercisesFragment.OnListFragmentInteractionListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;

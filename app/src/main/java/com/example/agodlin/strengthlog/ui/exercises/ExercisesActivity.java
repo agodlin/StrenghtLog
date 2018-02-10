@@ -1,16 +1,15 @@
-package com.example.agodlin.strengthlog.ui.exercise_name;
+package com.example.agodlin.strengthlog.ui.exercises;
 
-import android.content.Intent;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Exercise;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseActivity;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment;
 
-public class ExerciseNameActivity extends AppCompatActivity implements ExerciseNameFragment.OnListFragmentInteractionListener {
+public class ExercisesActivity extends AppCompatActivity implements ExercisesFragment.OnListFragmentInteractionListener,
+ExerciseFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class ExerciseNameActivity extends AppCompatActivity implements ExerciseN
             }
 
             // Create a new Fragment to be placed in the activity layout
-            ExerciseNameFragment firstFragment = new ExerciseNameFragment();
+            ExercisesFragment firstFragment = new ExercisesFragment();
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -41,10 +40,19 @@ public class ExerciseNameActivity extends AppCompatActivity implements ExerciseN
 
     @Override
     public void onListFragmentInteraction(String item) {
-        Snackbar.make(getWindow().getDecorView().getRootView(), "Pressed : " + item, Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show();
-        Intent intent = new Intent(this, ExerciseActivity.class);
-        intent.putExtra(ExerciseFragment.ARG_EXERCISE_NAME,item);
-        startActivity(intent);
+        Fragment firstFragment = new ExerciseFragment();
+        // In case this activity was started with special instructions from an
+        // Intent, pass the Intent's extras to the fragment as arguments
+        getIntent().putExtra(ExerciseFragment.ARG_EXERCISE_NAME, item);
+        firstFragment.setArguments(getIntent().getExtras());
+
+        // Add the fragment to the 'fragment_container' FrameLayout
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, firstFragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onListFragmentInteraction(Exercise item) {
+
     }
 }

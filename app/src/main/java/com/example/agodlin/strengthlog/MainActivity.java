@@ -15,8 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseActivity;
-import com.example.agodlin.strengthlog.ui.exercise_name.ExerciseNameActivity;
+import com.example.agodlin.strengthlog.ui.exercises.ExercisesActivity;
 import com.example.agodlin.strengthlog.ui.weight.WeightActivity;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutActivity;
 
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, WeightActivity.class);
             startActivity(intent);
         } else if (id == R.id.exercises) {
-            Intent intent = new Intent(this, ExerciseNameActivity.class);
+            Intent intent = new Intent(this, ExercisesActivity.class);
             startActivity(intent);
         } else if (id == R.id.workout) {
             Intent intent = new Intent(this, WorkoutActivity.class);
