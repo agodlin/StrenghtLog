@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
 import java.util.List;
 
@@ -18,11 +19,9 @@ import java.util.List;
 public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseCardRecyclerViewAdapter.ViewHolder> {
 
     private final List<Set> mValues;
-    private final ExerciseFragment.OnListFragmentInteractionListener mListener;
 
-    public ExerciseCardRecyclerViewAdapter(List<Set> items, ExerciseFragment.OnListFragmentInteractionListener listener) {
+    public ExerciseCardRecyclerViewAdapter(List<Set> items) {
         mValues = items;
-        mListener = listener;
     }
 
     @Override

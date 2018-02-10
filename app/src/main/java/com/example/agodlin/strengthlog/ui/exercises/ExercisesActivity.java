@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Exercise;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment;
 
 public class ExercisesActivity extends AppCompatActivity implements ExercisesFragment.OnListFragmentInteractionListener,
 ExerciseFragment.OnListFragmentInteractionListener{

@@ -18,6 +18,7 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseCardRecyclerViewAdapter;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutFragment.OnListFragmentInteractionListener;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class WorkoutItemRecyclerViewAdapter extends RecyclerView.Adapter<Workout
         Exercise exerciseDay = tmp.get(position);
         holder.header.setText(exerciseDay.name);
         holder.footer.setText("comment");
-        holder.recyclerView.setAdapter(new WorkoutCardRecyclerViewAdapter(exerciseDay.sets, mListener));
+        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

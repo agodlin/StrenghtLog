@@ -35,7 +35,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"
-            tools:context="com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment"
+            tools:context="com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment"
             tools:listitem="@layout/exercise_cardview_list_item" />
         <TextView
             android:layout_width="match_parent"

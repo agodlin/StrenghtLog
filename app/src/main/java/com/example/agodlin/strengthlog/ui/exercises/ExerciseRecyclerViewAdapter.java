@@ -1,4 +1,4 @@
-package com.example.agodlin.strengthlog.ui.exercise;
+package com.example.agodlin.strengthlog.ui.exercises;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,23 +18,23 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseFragment.OnListFragmentInteractionListener;
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseCardRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Exercise} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link ExerciseFragment.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "ExerciseAdapter";
 
-    private final OnListFragmentInteractionListener mListener;
+    private final ExerciseFragment.OnListFragmentInteractionListener mListener;
     private String exercise;
     List<Exercise> tmp;
-    public ExerciseRecyclerViewAdapter(List<Exercise> exercises, OnListFragmentInteractionListener listener) {
+    public ExerciseRecyclerViewAdapter(List<Exercise> exercises, ExerciseFragment.OnListFragmentInteractionListener listener) {
         mListener = listener;
         this.tmp = exercises;
     }
@@ -52,7 +52,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         Exercise exerciseDay = tmp.get(position);
         holder.header.setText(exerciseDay.date.toString());
         holder.footer.setText("comment");
-        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets, mListener));
+        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

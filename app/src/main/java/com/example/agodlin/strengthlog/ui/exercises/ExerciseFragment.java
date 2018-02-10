@@ -1,4 +1,4 @@
-package com.example.agodlin.strengthlog.ui.exercise;
+package com.example.agodlin.strengthlog.ui.exercises;
 
 import android.app.AlertDialog;
 import android.content.Context;
