@@ -16,8 +16,9 @@ public class ExerciseContract {
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TableEntry.TABLE_NAME + " (" +
                     TableEntry._ID + " INTEGER PRIMARY KEY," +
-                    TableEntry.COLUMN_NAME_TITLE + " TEXT," +
-                    TableEntry.COLUMN_NAME_SUBTITLE + " TEXT)";
+                    TableEntry.COLUMN_NAME_DATE + " TEXT," +
+                    TableEntry.COLUMN_NAME_EXERCISE + " TEXT," +
+                    TableEntry.COLUMN_NAME_SET + " TEXT)";
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TableEntry.TABLE_NAME;
@@ -25,8 +26,8 @@ public class ExerciseContract {
     /* Inner class that defines the table contents */
     public static class TableEntry implements BaseColumns {
         public static final String TABLE_NAME = "exercises";
-        public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_SUBTITLE = "subtitle";
+        public static final String COLUMN_NAME_DATE = "date";
+        public static final String COLUMN_NAME_EXERCISE = "exercise";
+        public static final String COLUMN_NAME_SET = "sets";
     }
 }
