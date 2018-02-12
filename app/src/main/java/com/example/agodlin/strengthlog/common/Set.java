@@ -18,4 +18,26 @@ public class Set {
         return "reps=" + reps +
                 ", weight=" + weight;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Set set = (Set) o;
+
+        if (reps != set.reps) return false;
+        return Double.compare(set.weight, weight) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = reps;
+        temp = Double.doubleToLongBits(weight);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
 }
