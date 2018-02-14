@@ -32,10 +32,10 @@ import java.util.List;
 public class WorkoutItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutItemRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "WorkoutAdapter";
     private final OnListFragmentInteractionListener mListener;
-    private List<Exercise> tmp;
-    public WorkoutItemRecyclerViewAdapter(Date date, OnListFragmentInteractionListener listener) {
+    private List<Exercise> mValues;
+    public WorkoutItemRecyclerViewAdapter(List<Exercise> items, OnListFragmentInteractionListener listener) {
         mListener = listener;
-        tmp = DataManager.workouts.get(date);
+        mValues = items;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class WorkoutItemRecyclerViewAdapter extends RecyclerView.Adapter<Workout
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Exercise exerciseDay = tmp.get(position);
+        Exercise exerciseDay = mValues.get(position);
         holder.header.setText(exerciseDay.name);
         holder.footer.setText("comment");
         holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets));
@@ -111,7 +111,7 @@ public class WorkoutItemRecyclerViewAdapter extends RecyclerView.Adapter<Workout
 
     @Override
     public int getItemCount() {
-        return tmp.size();
+        return mValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

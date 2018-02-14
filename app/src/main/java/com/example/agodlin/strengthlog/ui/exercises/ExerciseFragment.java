@@ -4,19 +4,30 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.CpuUsageInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
+import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -25,7 +36,7 @@ import com.example.agodlin.strengthlog.db.DataManager;
  * interface.
  */
 public class ExerciseFragment extends Fragment {
-
+    static String TAG = "ExerciseFragment";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     public static final String ARG_EXERCISE_NAME = "exercise-name";
@@ -33,6 +44,8 @@ public class ExerciseFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private String exerciseName;
+    List<Exercise> mValues;
+    RecyclerView recyclerView;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -58,13 +71,22 @@ public class ExerciseFragment extends Fragment {
             exerciseName = getArguments().getString(ARG_EXERCISE_NAME);
         }
         getActivity().setTitle(exerciseName);
+        mValues = DataManager.exercises.get(exerciseName);
+        Comparator<Exercise> c = new Comparator<Exercise>()
+        {
+            public int compare(Exercise u1, Exercise u2)
+            {
+                return u1.date.compareTo(u2.date);
+            }
+        };
+        Collections.sort(mValues, c);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
         if (mColumnCount <= 1) {
@@ -72,31 +94,52 @@ public class ExerciseFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(DataManager.exercises.get(exerciseName), mListener));
+        recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(mValues, mListener));
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                final EditText input = new EditText(getActivity());
-                builder.setView(input);
-                builder.setTitle(R.string.insert_exercise_name)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                view = inflater.inflate(R.layout.date_picker, null, false);
+                final DatePicker myDatePicker = (DatePicker) view.findViewById(R.id.myDatePicker);
+
+                // so that the calendar view won't appear
+                myDatePicker.setCalendarViewShown(false);
+                // the alert dialog
+                new AlertDialog.Builder(getActivity()).setView(view)
+                        .setTitle("Set Date")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                String name = input.getText().toString();
-                                if (name.isEmpty())
+                                int month = myDatePicker.getMonth() + 1;
+                                int day = myDatePicker.getDayOfMonth();
+                                int year = myDatePicker.getYear();
+                                Date date = new Date(day, month, year);
+                                Exercise exercise = new Exercise(exerciseName, date, new ArrayList<Set>());
+                                Comparator<Exercise> c = new Comparator<Exercise>()
                                 {
-                                    return;
+                                    public int compare(Exercise u1, Exercise u2)
+                                    {
+                                        return u1.date.compareTo(u2.date);
+                                    }
+                                };
+                                int position = Collections.binarySearch(mValues, exercise, c);
+                                if (position < 0) {
+                                    Log.d(TAG, "Date insert position : " + position + " value : " + date.toString());
+                                    position = position * -1 - 1;
+                                    mValues.add(position, exercise);
+                                    recyclerView.getAdapter().notifyItemInserted(position);
                                 }
+                                Log.d(TAG, "Text set To : " + exerciseName);
+                                dialog.cancel();
                             }
+
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
-                        });
-                builder.show();
+                        }).show();
             }
         });
 

@@ -17,7 +17,10 @@ import android.widget.EditText;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
+import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.db.DataManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +36,8 @@ public class WorkoutFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    Date date;
+    Date mDate;
+    List<Exercise> mValues;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -57,16 +61,17 @@ public class WorkoutFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            date = (Date)getArguments().getSerializable(ARG_WORKOUT_DATE);
+            mDate = (Date)getArguments().getSerializable(ARG_WORKOUT_DATE);
         }
-        getActivity().setTitle(date.toString());
+        getActivity().setTitle(mDate.toString());
+        mValues = DataManager.workouts.get(mDate);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
         if (mColumnCount <= 1) {
@@ -74,7 +79,7 @@ public class WorkoutFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new WorkoutItemRecyclerViewAdapter(date, mListener));
+        recyclerView.setAdapter(new WorkoutItemRecyclerViewAdapter(mValues, mListener));
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -87,10 +92,16 @@ public class WorkoutFragment extends Fragment {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 String name = input.getText().toString();
-                                if (name.isEmpty())
+                                //TODO should be able to add a new exercise name
+                                if (name.isEmpty() || !DataManager.exercises.containsKey(name))
                                 {
                                     return;
                                 }
+
+                                Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
+                                mValues.add(exercise);
+                                recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
+
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
