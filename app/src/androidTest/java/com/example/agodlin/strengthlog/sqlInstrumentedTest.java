@@ -40,6 +40,6 @@ public class sqlInstrumentedTest {
         appSqlDBHelper.onCreate(appSqlDBHelper.getWritableDatabase());
         Exercise exercise = DataManager.exercises.get("press").get(0);
         appSqlDBHelper.insert(exercise);
-        appSqlDBHelper.read();
+        appSqlDBHelper.readAll();
     }
 }

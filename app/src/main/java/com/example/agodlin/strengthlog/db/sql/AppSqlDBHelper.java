@@ -62,7 +62,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         long newRowId = db.insert(ExerciseContract.TableEntry.TABLE_NAME, null, values);
     }
 
-    public List<Exercise> read()
+    public List<Exercise> readAll()
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
