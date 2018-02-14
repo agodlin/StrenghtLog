@@ -19,6 +19,7 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,7 @@ public class WorkoutFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new WorkoutItemRecyclerViewAdapter(mValues, mListener));
+        recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(mValues));
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {

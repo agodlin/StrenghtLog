@@ -1,4 +1,4 @@
-package com.example.agodlin.strengthlog.ui.workout;
+package com.example.agodlin.strengthlog.ui.exercise;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,24 +18,23 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.exercise.ExerciseCardRecyclerViewAdapter;
-import com.example.agodlin.strengthlog.ui.workout.WorkoutFragment.OnListFragmentInteractionListener;
+import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Exercise} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link ExerciseFragment.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class WorkoutItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutItemRecyclerViewAdapter.ViewHolder> {
-    private static final String TAG = "WorkoutAdapter";
-    private final OnListFragmentInteractionListener mListener;
-    private List<Exercise> mValues;
-    public WorkoutItemRecyclerViewAdapter(List<Exercise> items, OnListFragmentInteractionListener listener) {
-        mListener = listener;
-        mValues = items;
+public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRecyclerViewAdapter.ViewHolder> {
+    private static final String TAG = "ExerciseAdapter";
+
+    private String exercise;
+    List<Exercise> mValues;
+    public ExerciseRecyclerViewAdapter(List<Exercise> exercises) {
+        this.mValues = exercises;
     }
 
     @Override
@@ -47,18 +46,15 @@ public class WorkoutItemRecyclerViewAdapter extends RecyclerView.Adapter<Workout
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+
         Exercise exerciseDay = mValues.get(position);
-        holder.header.setText(exerciseDay.name);
+        holder.header.setText(exerciseDay.name + " " + exerciseDay.date.toString());
         holder.footer.setText("comment");
         holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
 
-                }
             }
         });
         holder.header.setOnClickListener(new View.OnClickListener() {

@@ -4,10 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.CpuUsageInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.ui.exercise.ExerciseRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,7 +92,7 @@ public class ExerciseFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(mValues, mListener));
+        recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(mValues));
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
