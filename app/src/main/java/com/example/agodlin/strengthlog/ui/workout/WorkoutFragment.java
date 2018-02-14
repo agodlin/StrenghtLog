@@ -80,7 +80,7 @@ public class WorkoutFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(mValues));
+        recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(mValues, 0));
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {

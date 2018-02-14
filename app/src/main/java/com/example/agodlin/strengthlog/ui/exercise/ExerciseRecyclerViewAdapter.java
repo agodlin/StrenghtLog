@@ -14,13 +14,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
-import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
-import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,22 +30,33 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
     private String exercise;
     List<Exercise> mValues;
-    public ExerciseRecyclerViewAdapter(List<Exercise> exercises) {
+    int viewType;
+    public ExerciseRecyclerViewAdapter(List<Exercise> exercises, int viewType) {
         this.mValues = exercises;
+        this.viewType = viewType;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        // Just as an example, return 0 or 2 depending on position
+        // Note that unlike in ListView adapters, types don't have to be contiguous
+        return viewType;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_exercise, parent, false);
-        return new ViewHolder(view, parent.getContext());
+        return new ViewHolder(view, parent.getContext(), viewType);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        Exercise exerciseDay = mValues.get(position);
-        holder.header.setText(exerciseDay.name + " " + exerciseDay.date.toString());
+        final Exercise exerciseDay = mValues.get(position);
+        String header = holder.viewType == 0 ? exerciseDay.name : exerciseDay.date.toString();
+
+        holder.header.setText(header);
         holder.footer.setText("comment");
         holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets));
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
@@ -77,30 +85,28 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "ImageButton pressed ");
-                AlertDialog.Builder builder = new AlertDialog.Builder(holder.context);
-                final EditText input = new EditText(holder.context);
-                builder.setView(input);
-                builder.setTitle(R.string.insert_exercise_name)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                String name = input.getText().toString();
-                                if (name.isEmpty())
-                                {
-                                    Log.d(TAG, "Text Empty, do nothing");
-                                    return;
-                                }
-                                Log.d(TAG, "Text set To : " + name);
-                                Exercise exercise = new Exercise(name, new Date(1,1,1), new ArrayList<Set>());
-                                DataManager.exercises.get(holder.header.getText()).add(exercise);
-                                holder.recyclerView.getAdapter().notifyItemInserted(DataManager.exercises.get(holder.header.getText()).size()-1);
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                builder.show();
+                LayoutInflater inflater = LayoutInflater.from(holder.context);
+                View view = inflater.inflate(R.layout.add_set_layout, null);
+                final EditText reps = (EditText)view.findViewById(R.id.reps);
+                final EditText weights = (EditText)view.findViewById(R.id.weight);
+                new AlertDialog.Builder(holder.context).setTitle("Add Set").setView(view)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            String repsValue = reps.getText().toString();
+                            String weightsValue = weights.getText().toString();
+                            Log.i(TAG, "reps " + repsValue);
+                            Log.i(TAG, "weight " + weightsValue);
+                            exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), Double.parseDouble(weightsValue)));
+                            holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
+                            dialog.cancel();
+                        }
+
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    }).show();
             }
         });
     }
@@ -116,7 +122,8 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         public final TextView footer;
         public final ImageButton imageButton;
         public final Context context;
-        public ViewHolder(View view, Context context) {
+        public final int viewType;
+        public ViewHolder(View view, Context context, int viewType) {
             super(view);
             recyclerView = (RecyclerView)itemView.findViewById(R.id.list);
             header = (TextView)itemView.findViewById(R.id.card_header);
@@ -124,6 +131,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
             imageButton = (ImageButton) itemView.findViewById(R.id.card_menu);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             this.context = context;
+            this.viewType = viewType;
         }
 
         @Override
