@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,8 @@ import android.widget.DatePicker;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.utils.OnLoadMoreListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +40,11 @@ public class WorkoutsFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     List<Date> mItems;
     RecyclerView recyclerView;
+    MyItemRecyclerViewAdapter adapter;
+    private int lastVisibleItem, totalItemCount;
+    private boolean isLoading;
+    private int visibleThreshold = 5;
+    private OnLoadMoreListener mOnLoadMoreListener;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -80,13 +88,60 @@ public class WorkoutsFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-        }
-        Date date = new Date(10,12,2017);
-        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(mItems, mListener));
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new MyItemRecyclerViewAdapter(mItems, mListener);
+
+        recyclerView.setAdapter(adapter);
+
+        mOnLoadMoreListener = (new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                Log.e("haint", "Load More");
+                mItems.add(null);
+                adapter.notifyItemInserted(mItems.size() - 1);
+
+                //Load more data for reyclerview
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("haint", "Load More 2");
+
+                        //Remove loading item
+                        mItems.remove(mItems.size() - 1);
+                        adapter.notifyItemRemoved(mItems.size());
+
+                        //Load data
+                        int index = mItems.size();
+                        int end = index + 20;
+                        for (int i = index; i < end; i++) {
+                            Date user = new Date(i, 23, 2018);
+                            mItems.add(user);
+                        }
+                        adapter.notifyDataSetChanged();
+                        isLoading = false;
+                    }
+                }, 5000);
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                totalItemCount = linearLayoutManager.getItemCount();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (mOnLoadMoreListener != null) {
+                        mOnLoadMoreListener.onLoadMore();
+                    }
+                    isLoading = true;
+                }
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
