@@ -99,7 +99,7 @@ public class WorkoutFragment extends Fragment {
                                     return;
                                 }
 
-                                Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
+                                Exercise exercise = new Exercise(-1, name, mDate, new ArrayList<Set>());
                                 mValues.add(exercise);
                                 recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
 

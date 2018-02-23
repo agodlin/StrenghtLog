@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
@@ -33,7 +35,6 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(ExerciseContract.SQL_DELETE_ENTRIES);
         db.execSQL(ExerciseContract.SQL_CREATE_ENTRIES);
     }
 
@@ -46,7 +47,15 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
-    public void insert(Exercise exercise)
+
+    public void reset()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(ExerciseContract.SQL_DELETE_ENTRIES);
+        db.execSQL(ExerciseContract.SQL_CREATE_ENTRIES);
+    }
+
+    public Exercise insert(Exercise exercise)
     {
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
@@ -60,6 +69,14 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 
 // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(ExerciseContract.TableEntry.TABLE_NAME, null, values);
+        if (newRowId < 0)
+        {
+            //TODO add exception
+            Log.e("AppSqlDBHelper", "inset to db fail");
+        }
+        Exercise exercise1 = new Exercise(newRowId, exercise);
+
+        return exercise1;
     }
 
     public List<Exercise> readAll()
@@ -69,6 +86,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 // Define a projection that specifies which columns from the database
 // you will actually use after this query.
         String[] projection = {
+                BaseColumns._ID,
                 ExerciseContract.TableEntry.COLUMN_NAME_DATE,
                 ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE,
                 ExerciseContract.TableEntry.COLUMN_NAME_SET
@@ -94,12 +112,13 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         Gson gson = new Gson();
         List<Exercise> items = new ArrayList<>();
         while(cursor.moveToNext()) {
-            String date = cursor.getString(0);
-            String name = cursor.getString(1);
-            String setsJsonString = cursor.getString(2);
+            int _id = cursor.getInt(0);
+            String date = cursor.getString(1);
+            String name = cursor.getString(2);
+            String setsJsonString = cursor.getString(3);
             Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
             List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
-            items.add(new Exercise(name, gson.fromJson(date, Date.class), sets));
+            items.add(new Exercise(_id, name, gson.fromJson(date, Date.class), sets));
         }
         cursor.close();
         return items;

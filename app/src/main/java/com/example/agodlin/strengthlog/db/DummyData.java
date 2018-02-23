@@ -326,7 +326,7 @@ public class DummyData {
 
     static Exercise exercise(String name, Date date,List<Set> sets)
     {
-        return new Exercise(name, date,sets);
+        return new Exercise(-1, name, date,sets);
     }
 
     static Set set(int reps, double weight)

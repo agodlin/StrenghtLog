@@ -113,7 +113,7 @@ public class ExerciseFragment extends Fragment {
                                 int day = myDatePicker.getDayOfMonth();
                                 int year = myDatePicker.getYear();
                                 Date date = new Date(day, month, year);
-                                Exercise exercise = new Exercise(exerciseName, date, new ArrayList<Set>());
+                                Exercise exercise = new Exercise(-1, exerciseName, date, new ArrayList<Set>());
                                 Comparator<Exercise> c = new Comparator<Exercise>()
                                 {
                                     public int compare(Exercise u1, Exercise u2)

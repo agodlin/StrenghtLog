@@ -7,13 +7,23 @@ import java.util.List;
  */
 
 public class Exercise {
-    public String name;
-    public Date date;
-    public List<Set> sets;
+    private final long _id;
+    public final String name;
+    public final Date date;
+    public final List<Set> sets;
 
-    public Exercise(String name, Date date, List<Set> sets) {
+    public Exercise(long id, String name, Date date, List<Set> sets) {
+        this._id = id;
         this.name = name;
         this.date = date;
         this.sets = sets;
+    }
+
+    public Exercise(long id, Exercise rhs)
+    {
+        this._id = id;
+        this.name = rhs.name;
+        this.date = rhs.date;
+        this.sets = rhs.sets;
     }
 }

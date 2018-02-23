@@ -7,17 +7,16 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 
-import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.db.sql.AppSqlDBHelper;
-import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
-import com.example.agodlin.strengthlog.utils.FileIO;
-import com.google.gson.Gson;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -37,9 +36,15 @@ public class sqlInstrumentedTest {
         }
         DataManager.init();
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
-        appSqlDBHelper.onCreate(appSqlDBHelper.getWritableDatabase());
+        appSqlDBHelper.reset();
         Exercise exercise = DataManager.exercises.get("press").get(0);
         appSqlDBHelper.insert(exercise);
-        appSqlDBHelper.readAll();
+        List<Exercise> exerciseList= appSqlDBHelper.readAll();
+        assertEquals(exerciseList.size(), 1);
+
+        exercise = DataManager.exercises.get("bench").get(0);
+        appSqlDBHelper.insert(exercise);
+        exerciseList= appSqlDBHelper.readAll();
+        assertEquals(exerciseList.size(), 2);
     }
 }
