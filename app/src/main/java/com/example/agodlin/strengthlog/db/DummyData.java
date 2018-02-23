@@ -1,12 +1,16 @@
 package com.example.agodlin.strengthlog.db;
 
+import android.content.Context;
+
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.db.sql.AppSqlDBHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +21,8 @@ import java.util.Map;
 public class DummyData {
     public static Map<Date, List<Exercise>> workouts = new HashMap<>();
     public static Map<String, List<Exercise>> exercises = new HashMap<>();
-    public static void init(){
+
+    public static void init(Context context){
         //TODO populate data with dummy initial data.
         exercises.put("squat", new ArrayList<Exercise>());
         exercises.put("deadlift", new ArrayList<Exercise>());
@@ -46,7 +51,21 @@ public class DummyData {
         day14();
         day15();
         day16();
+        saveToSQL(context);
     }
+
+    static void saveToSQL(Context context)
+    {
+        AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
+        appSqlDBHelper.reset();
+        for(Date key : workouts.keySet()) {
+            for (Exercise exercise : workouts.get(key))
+                appSqlDBHelper.insert(exercise);
+        }
+        workouts = null;
+        exercises = null;
+    }
+
     static List<Exercise> day1()
     {
         Date date = new Date(10,12,2017);
@@ -139,7 +158,7 @@ public class DummyData {
         return exerciseList;
     }
     static List<Exercise> day6() {
-        Date date = new Date(18,1,2018);
+        Date date = new Date(18,12,2017);
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("bench", date, sets(new int[]{5,3,3,3,3,3,3,3}, 105)));
         exerciseList.add(exercise("press", date, sets(new int[]{7,6,5}, 50)));
@@ -207,7 +226,7 @@ public class DummyData {
         return exerciseList;
     }
     static List<Exercise> day10() {
-        Date date = new Date(25,1,2018);
+        Date date = new Date(25,12,2017);
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("bench", date, sets(new int[]{5,5,5,5,4}, 105)));
         exerciseList.add(exercise("press", date, sets(new int[]{6,6,6}, 50)));
@@ -324,7 +343,7 @@ public class DummyData {
         return exerciseList;
     }
 
-    static Exercise exercise(String name, Date date,List<Set> sets)
+    public static Exercise exercise(String name, Date date,List<Set> sets)
     {
         return new Exercise(-1, name, date,sets);
     }
@@ -344,7 +363,7 @@ public class DummyData {
         return sets;
     }
 
-    static List<Set> sets(int[] reps, double weight)
+    public static List<Set> sets(int[] reps, double weight)
     {
         List<Set> sets = new ArrayList<>();
         for(int i = 0; i < reps.length ; i++)

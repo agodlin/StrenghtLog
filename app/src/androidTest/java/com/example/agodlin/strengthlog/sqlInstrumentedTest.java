@@ -7,16 +7,16 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 
+import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.db.DummyData;
 import com.example.agodlin.strengthlog.db.sql.AppSqlDBHelper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -34,17 +34,25 @@ public class sqlInstrumentedTest {
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
         }
-        DataManager.init();
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
+        DummyData.init(context);
+        assertEquals(appSqlDBHelper.readAll().size(), 75);
+        DataManager.init(context);
+        assertEquals(DataManager.workouts.size(), 15);
+        assertEquals(DataManager.exercises.size(), 10);
+
         appSqlDBHelper.reset();
-        Exercise exercise = DataManager.exercises.get("press").get(0);
+        Date date = new Date(21,12,2017);
+        Exercise exercise = DummyData.exercise("press", date, DummyData.sets(new int[]{5,5,5,5,5}, 60));
+
         appSqlDBHelper.insert(exercise);
         List<Exercise> exerciseList= appSqlDBHelper.readAll();
         assertEquals(exerciseList.size(), 1);
 
-        exercise = DataManager.exercises.get("bench").get(0);
-        appSqlDBHelper.insert(exercise);
+        Exercise exercise2 = DummyData.exercise("bench", date, DummyData.sets(new int[]{8,8,8}, 80));
+        appSqlDBHelper.insert(exercise2);
         exerciseList= appSqlDBHelper.readAll();
+
         assertEquals(exerciseList.size(), 2);
     }
 }

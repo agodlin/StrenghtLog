@@ -25,6 +25,7 @@ import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.db.DataManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,6 +75,7 @@ public class ExercisesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_name_list, container, false);
         items = new ArrayList<>(DataManager.exercises.keySet());
+        Collections.sort(items);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -99,10 +101,14 @@ public class ExercisesFragment extends Fragment {
                                     return;
                                 }
                                 Log.d(TAG, "Text set To : " + name);
-                                DataManager.addNewExercise(name);
-                                items.add(name);
-                                mRecyclerView.getAdapter().notifyItemInserted(items.size()-1);
-                                DataManager.addNewExercise(name);
+                                int position = Collections.binarySearch(items, name);
+                                if (position < 0) {
+                                    Log.d(TAG, "Date insert position : " + position + " value : " + name);
+                                    position = position * -1 - 1;
+                                    items.add(position, name);
+                                    mRecyclerView.getAdapter().notifyItemInserted(position);
+                                    DataManager.addNewExercise(name);
+                                }
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

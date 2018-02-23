@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.db.DummyData;
 import com.example.agodlin.strengthlog.ui.exercises.ExercisesActivity;
 import com.example.agodlin.strengthlog.ui.weight.WeightActivity;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutActivity;
@@ -46,8 +47,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        DataManager.init();
+        DummyData.init(getApplicationContext());
+        DataManager.init(getApplicationContext());
     }
 
     @Override
