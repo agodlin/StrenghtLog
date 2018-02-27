@@ -113,7 +113,7 @@ public class BodyWeightFragment extends Fragment {
                                         .setTitle("Set Date")
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                int month = myDatePicker.getMonth() + 1;
+                                                int month = myDatePicker.getMonth();
                                                 int day = myDatePicker.getDayOfMonth();
                                                 int year = myDatePicker.getYear();
                                                 Date date = new Date(day, month, year);

@@ -9,9 +9,9 @@ import java.io.Serializable;
  */
 
 public class Date implements Comparable,Serializable {
-    private int day;
-    private int month;
-    private int year;
+    public int day;
+    public int month;
+    public int year;
 
     public Date(int day, int month, int year) {
         this.day = day;

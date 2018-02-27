@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +64,9 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         Gson gson = new Gson();
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, gson.toJson(exercise.date));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(exercise.date.year, exercise.date.month, exercise.date.day);
+        values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, calendar.getTimeInMillis());
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE, exercise.name);
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_SET, gson.toJson(exercise.sets));
 
@@ -113,12 +116,14 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         List<Exercise> items = new ArrayList<>();
         while(cursor.moveToNext()) {
             int _id = cursor.getInt(0);
-            String date = cursor.getString(1);
+            long millis = cursor.getLong(1);
             String name = cursor.getString(2);
             String setsJsonString = cursor.getString(3);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(millis);
             Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
             List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
-            items.add(new Exercise(_id, name, gson.fromJson(date, Date.class), sets));
+            items.add(new Exercise(_id, name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets));
         }
         cursor.close();
         return items;

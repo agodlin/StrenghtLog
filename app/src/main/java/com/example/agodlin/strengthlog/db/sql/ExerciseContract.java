@@ -16,7 +16,7 @@ public class ExerciseContract {
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TableEntry.TABLE_NAME + " (" +
                     TableEntry._ID + " INTEGER PRIMARY KEY," +
-                    TableEntry.COLUMN_NAME_DATE + " TEXT," +
+                    TableEntry.COLUMN_NAME_DATE + " INTEGER," +
                     TableEntry.COLUMN_NAME_EXERCISE + " TEXT," +
                     TableEntry.COLUMN_NAME_SET + " TEXT)";
 

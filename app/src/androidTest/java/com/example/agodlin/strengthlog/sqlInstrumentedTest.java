@@ -16,6 +16,7 @@ import com.example.agodlin.strengthlog.db.sql.AppSqlDBHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 
