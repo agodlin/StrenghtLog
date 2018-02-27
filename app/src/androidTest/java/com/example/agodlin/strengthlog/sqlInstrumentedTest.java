@@ -35,24 +35,24 @@ public class sqlInstrumentedTest {
                 != PackageManager.PERMISSION_GRANTED) {
         }
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
+        appSqlDBHelper.reset();
         DummyData.init(context);
-        assertEquals(appSqlDBHelper.readAll().size(), 75);
         DataManager.init(context);
-        assertEquals(DataManager.workouts.size(), 15);
+        assertEquals(appSqlDBHelper.readAll().size(), 80);
+        assertEquals(DataManager.workouts.size(), 16);
         assertEquals(DataManager.exercises.size(), 10);
 
-        appSqlDBHelper.reset();
         Date date = new Date(21,12,2017);
         Exercise exercise = DummyData.exercise("press", date, DummyData.sets(new int[]{5,5,5,5,5}, 60));
 
         appSqlDBHelper.insert(exercise);
         List<Exercise> exerciseList= appSqlDBHelper.readAll();
-        assertEquals(exerciseList.size(), 1);
+        assertEquals(exerciseList.size(), 81);
 
         Exercise exercise2 = DummyData.exercise("bench", date, DummyData.sets(new int[]{8,8,8}, 80));
         appSqlDBHelper.insert(exercise2);
         exerciseList= appSqlDBHelper.readAll();
 
-        assertEquals(exerciseList.size(), 2);
+        assertEquals(exerciseList.size(), 82);
     }
 }
