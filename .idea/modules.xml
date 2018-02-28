@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/StrenghtLog.iml" filepath="$PROJECT_DIR$/StrenghtLog.iml" />
-      <module fileurl="file://C:\Users\agodlin\projects\StrenghtLog\StrengthLog.iml" filepath="C:\Users\agodlin\projects\StrenghtLog\StrengthLog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/StrenghtLog.iml" filepath="$PROJECT_DIR$/.idea/StrenghtLog.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
