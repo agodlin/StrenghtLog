@@ -11,6 +11,7 @@ import android.util.Log;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.db.sql.ExerciseContract;
+import com.example.agodlin.strengthlog.ui.weight.BodyWeightItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -36,12 +37,15 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(ExerciseContract.SQL_CREATE_ENTRIES);
+        db.execSQL(BodyWeightContract.SQL_CREATE_ENTRIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(ExerciseContract.SQL_DELETE_ENTRIES);
+        db.execSQL(BodyWeightContract.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
     @Override
@@ -54,6 +58,8 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(ExerciseContract.SQL_DELETE_ENTRIES);
         db.execSQL(ExerciseContract.SQL_CREATE_ENTRIES);
+        db.execSQL(BodyWeightContract.SQL_DELETE_ENTRIES);
+        db.execSQL(BodyWeightContract.SQL_CREATE_ENTRIES);
     }
 
     public Exercise insert(Exercise exercise)
@@ -80,6 +86,77 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         Exercise exercise1 = new Exercise(newRowId, exercise);
 
         return exercise1;
+    }
+
+    public BodyWeightItem insertWeight(BodyWeightItem bodyWeightItem)
+    {
+        // Gets the data repository in writePrivate mode
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Gson gson = new Gson();
+// Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(bodyWeightItem.date.year, bodyWeightItem.date.month, bodyWeightItem.date.day);
+        values.put(BodyWeightContract.TableEntry.COLUMN_NAME_DATE, calendar.getTimeInMillis());
+        values.put(BodyWeightContract.TableEntry.COLUMN_NAME_WEIGHT, bodyWeightItem.weight);
+        values.put(BodyWeightContract.TableEntry.COLUMN_NAME_COMMENT, bodyWeightItem.comment);
+
+// Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(BodyWeightContract.TableEntry.TABLE_NAME, null, values);
+        if (newRowId < 0)
+        {
+            //TODO add exception
+            Log.e("AppSqlDBHelper", "inset to db fail");
+        }
+        BodyWeightItem bodyWeightItem1 = new BodyWeightItem(newRowId, bodyWeightItem);
+
+        return bodyWeightItem1;
+    }
+
+    public List<BodyWeightItem> readBodyWeight()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+// Define a projection that specifies which columns from the database
+// you will actually use after this query.
+        String[] projection = {
+                BaseColumns._ID,
+                BodyWeightContract.TableEntry.COLUMN_NAME_DATE,
+                BodyWeightContract.TableEntry.COLUMN_NAME_WEIGHT,
+                BodyWeightContract.TableEntry.COLUMN_NAME_COMMENT
+        };
+
+// Filter results WHERE "title" = 'My Title'
+        String selection = BodyWeightContract.TableEntry.COLUMN_NAME_DATE + " = ?";
+        String[] selectionArgs = { "My Title" };
+
+// How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                BodyWeightContract.TableEntry.COLUMN_NAME_DATE + " DESC";
+
+        Cursor cursor = db.query(
+                BodyWeightContract.TableEntry.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        Gson gson = new Gson();
+        List<BodyWeightItem> items = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            int _id = cursor.getInt(0);
+            long millis = cursor.getLong(1);
+            float weight = cursor.getFloat(2);
+            String comment = cursor.getString(3);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(millis);
+            items.add(new BodyWeightItem(_id, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), weight, comment));
+        }
+        cursor.close();
+        return items;
     }
 
     public List<Exercise> readAll()

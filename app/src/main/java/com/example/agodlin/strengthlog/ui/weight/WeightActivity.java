@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import com.example.agodlin.strengthlog.R;
-import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
 
 public class WeightActivity extends AppCompatActivity implements BodyWeightFragment.OnListFragmentInteractionListener {
     private static String TAG = "WeightActivity";
@@ -50,7 +49,7 @@ public class WeightActivity extends AppCompatActivity implements BodyWeightFragm
 
 
     @Override
-    public void onListFragmentInteraction(BodyWeightContent.BodyWeightItem item) {
+    public void onListFragmentInteraction(BodyWeightItem item) {
         Log.i(TAG, item.date.toString());
     }
 }

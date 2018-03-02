@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.ui.weight.BodyWeightFragment.OnListFragmentInteractionListener;
-import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent.BodyWeightItem;
 import com.example.agodlin.strengthlog.R;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class BodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<BodyWeig
 
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).date.toString());
-        holder.mContentView.setText(mValues.get(position).weight);
+        holder.mContentView.setText(String.valueOf(mValues.get(position).weight));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

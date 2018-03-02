@@ -21,10 +21,13 @@ import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
-import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
-import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent.BodyWeightItem;
+import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.utils.FileIO;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -79,7 +82,7 @@ public class BodyWeightFragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.setAdapter(new BodyWeightRecyclerViewAdapter(BodyWeightContent.ITEMS, mListener));
+        mRecyclerView.setAdapter(new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems, mListener));
 
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_weight_in_button);
@@ -95,13 +98,13 @@ public class BodyWeightFragment extends Fragment {
                 builder.setTitle(R.string.insert_weight)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                final String weight = input.getText().toString();
-                                if (weight.isEmpty())
+                                final String weightString = input.getText().toString();
+                                if (weightString.isEmpty())
                                 {
                                     Log.d(TAG, "Text Empty, do nothing");
                                     return;
                                 }
-                                Log.d(TAG, "Weight value : " + weight);
+                                Log.d(TAG, "Weight value : " + weightString);
                                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                                 View view = inflater.inflate(R.layout.date_picker, null, false);
                                 final DatePicker myDatePicker = (DatePicker) view.findViewById(R.id.myDatePicker);
@@ -118,7 +121,8 @@ public class BodyWeightFragment extends Fragment {
                                                 int year = myDatePicker.getYear();
                                                 Date date = new Date(day, month, year);
                                                 Log.d(TAG, "date value : " + date.toString());
-                                                BodyWeightItem bodyWeightItem = new BodyWeightItem(date,
+                                                float weight = Float.valueOf(weightString);
+                                                BodyWeightItem bodyWeightItem = new BodyWeightItem(-1, date,
                                                         weight, "");
                                                 Comparator<BodyWeightItem> c = new Comparator<BodyWeightItem>()
                                                 {
@@ -127,12 +131,16 @@ public class BodyWeightFragment extends Fragment {
                                                         return u1.date.compareTo(u2.date);
                                                     }
                                                 };
-                                                int position = Collections.binarySearch(BodyWeightContent.ITEMS, bodyWeightItem, c);
+                                                int position = Collections.binarySearch(DataManager.bodyWeightItems, bodyWeightItem, c);
                                                 if (position < 0) {
                                                     Log.d(TAG, "BodyWeightItem insert position : " + position + " value : " + bodyWeightItem.toString());
                                                     position = position * -1 - 1;
-                                                    BodyWeightContent.ITEMS.add(position, bodyWeightItem);
+                                                    DataManager.bodyWeightItems.add(position, bodyWeightItem);
                                                     mRecyclerView.getAdapter().notifyItemInserted(position);
+                                                }
+                                                else {
+                                                    //TODO think if i want to replace it, or ask user to edit the existing value
+                                                    Log.i(TAG, "Date already exists");
                                                 }
                                                 dialog.cancel();
                                             }
@@ -165,11 +173,19 @@ public class BodyWeightFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_export:
+            case R.id.action_export: {
                 Gson gson = new Gson();
-                String jsonString = gson.toJson(BodyWeightContent.ITEMS);
+                String jsonString = gson.toJson(DataManager.bodyWeightItems);
                 Log.i(TAG, "BodyWeightContent json value : " + jsonString);
-
+                String filename = "bodyweight.json";
+                FileIO.writePrivate(jsonString.getBytes(), getContext(), filename);
+            }
+            case R.id.action_import: {
+                String filename = "bodyweight.json";
+                String jsonString = new String(FileIO.readPrivate(getContext(), filename));
+                Type listType = new TypeToken<ArrayList<BodyWeightItem>>(){}.getType();
+                DataManager.bodyWeightItems = new Gson().fromJson(jsonString, listType);
+            }
             default:
                 break;
         }

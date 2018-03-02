@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.db.sql.AppSqlDBHelper;
+import com.example.agodlin.strengthlog.ui.weight.BodyWeightItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +20,13 @@ public class DataManager {
     public static Map<Date, List<Exercise>> workouts = new HashMap<>();
     public static Map<String, List<Exercise>> exercises = new HashMap<>();
     public static List<Exercise> exercisesList = new ArrayList<>();
+    public static List<BodyWeightItem> bodyWeightItems;
 
     public static void init(Context context)
     {
         Map<Date, List<Exercise>> workouts = new HashMap<>();
         Map<String, List<Exercise>> exercises = new HashMap<>();
+        bodyWeightItems = new ArrayList<>();
         //TODO readPrivate from database
 
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
