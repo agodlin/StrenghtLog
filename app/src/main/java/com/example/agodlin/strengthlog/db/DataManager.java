@@ -18,16 +18,25 @@ import java.util.Map;
 public class DataManager {
     public static Map<Date, List<Exercise>> workouts = new HashMap<>();
     public static Map<String, List<Exercise>> exercises = new HashMap<>();
+    public static List<Exercise> exercisesList = new ArrayList<>();
 
     public static void init(Context context)
     {
         Map<Date, List<Exercise>> workouts = new HashMap<>();
         Map<String, List<Exercise>> exercises = new HashMap<>();
-        //TODO read from database
+        //TODO readPrivate from database
 
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
         List<Exercise> exerciseList= appSqlDBHelper.readAll();
 
+        setAll(exerciseList);
+    }
+
+    static public void setAll(List<Exercise> exerciseList)
+    {
+        workouts = new HashMap<>();
+        exercises = new HashMap<>();
+        exercisesList = exerciseList;
         for(Exercise exercise : exerciseList)
         {
             String name = exercise.name;
@@ -42,6 +51,11 @@ public class DataManager {
 
         DataManager.workouts = workouts;
         DataManager.exercises = exercises;
+    }
+
+    static public List<Exercise> readAll()
+    {
+        return exercisesList;
     }
 
     static public void addNewExercise(String exerciseName)

@@ -15,7 +15,8 @@ import static android.content.ContentValues.TAG;
  */
 
 public class FileIO {
-    static public void write(byte[] bytes, Context context, String filename)
+
+    static public void writePrivate(byte[] bytes, Context context, String filename)
     {
         FileOutputStream outputStream;
         try {
@@ -27,7 +28,7 @@ public class FileIO {
         }
     }
 
-    static public byte[] read(Context context, String filename)
+    static public byte[] readPrivate(Context context, String filename)
     {
         FileInputStream inputStream;
 
@@ -42,9 +43,9 @@ public class FileIO {
         return null;
     }
 
-    static public void write2(byte[] bytes, String filename)
+    static public void writeStorage(byte[] bytes, String filename, String subfolder)
     {
-        File dir = getAlbumStorageDir("test");
+        File dir = getAlbumStorageDir(subfolder);
         File file = new File(dir, filename);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -55,9 +56,9 @@ public class FileIO {
         }
     }
 
-    static public byte[] read2(String filename)
+    static public byte[] readStorage(String filename, String subfolder)
     {
-        File dir = getAlbumStorageDir("test");
+        File dir = getAlbumStorageDir(subfolder);
         File file = new File(dir, filename);
         try {
             FileInputStream inputStream = new FileInputStream(file);
@@ -70,15 +71,22 @@ public class FileIO {
         return null;
     }
 
-    static public File getAlbumStorageDir(String albumName) {
+    static public File getAlbumStorageDir(String subfolder) {
         // Get the directory for the user's public pictures directory.
-        File file2 = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), albumName);
-        File file = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM);
-        if (!file.mkdirs()) {
-            Log.e(TAG, "Directory not created");
+        if (subfolder == null)
+        {
+            File file = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DCIM);
+            return file;
         }
-        return file;
+        else
+        {
+            File file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DCIM), subfolder);
+            if (!file.mkdirs()) {
+                Log.e(TAG, "Directory not created");
+            }
+            return file;
+        }
     }
 }

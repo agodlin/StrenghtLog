@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +15,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.agodlin.strengthlog.common.Exercise;
+import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.db.DummyData;
 import com.example.agodlin.strengthlog.ui.exercises.ExercisesActivity;
 import com.example.agodlin.strengthlog.ui.weight.WeightActivity;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutActivity;
+import com.example.agodlin.strengthlog.utils.FileIO;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private static String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +87,25 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        else if (id == R.id.export_exercises) {
+            Log.d(TAG, "Saving exercises to file");
+            List<Exercise> exercises = DataManager.readAll();
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(exercises);
+            String filename = "exercises";
+            FileIO.writePrivate(jsonString.getBytes(), getApplicationContext(), filename);
+            return true;
+        }
+        else if(id == R.id.load_exercises)
+        {
+            Log.d(TAG, "Loading exercises from file");
+            String filename = "exercises";
+            String jsonString = new String(FileIO.readPrivate(getApplicationContext(), filename));
+            Type listType = new TypeToken<ArrayList<Exercise>>(){}.getType();
+            List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
+            DataManager.setAll(exercises);
             return true;
         }
 

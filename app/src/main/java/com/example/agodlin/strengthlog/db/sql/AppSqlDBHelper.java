@@ -58,7 +58,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 
     public Exercise insert(Exercise exercise)
     {
-        // Gets the data repository in write mode
+        // Gets the data repository in writePrivate mode
         SQLiteDatabase db = this.getWritableDatabase();
 
         Gson gson = new Gson();
