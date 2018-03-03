@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -43,7 +44,9 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new TestViewHolder(parent);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.swipe_delete, parent, false);
+        return new TestViewHolder(view);
     }
 
     @Override
@@ -152,10 +155,13 @@ public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter {
         TextView titleTextView;
         Button undoButton;
 
-        public TestViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view, parent, false));
-            titleTextView = (TextView) itemView.findViewById(R.id.title_text_view);
-            undoButton = (Button) itemView.findViewById(R.id.undo_button);
+        public TestViewHolder(View parent) {
+            super(parent);
+            undoButton = (Button) parent.findViewById(R.id.undo_button);
+            ViewStub stub = (ViewStub) parent.findViewById(R.id.stub_import);
+            stub.setLayoutResource(R.layout.row_view);
+            stub.inflate(); // inflate 1st layout
+            titleTextView = (TextView)parent.findViewById(R.id.title_text_view);
         }
     }
 }
