@@ -26,12 +26,11 @@ public class DataManager {
     {
         Map<Date, List<Exercise>> workouts = new HashMap<>();
         Map<String, List<Exercise>> exercises = new HashMap<>();
-        bodyWeightItems = new ArrayList<>();
         //TODO readPrivate from database
 
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
         List<Exercise> exerciseList= appSqlDBHelper.readAll();
-
+        bodyWeightItems = appSqlDBHelper.readBodyWeight();
         setAll(exerciseList);
     }
 
@@ -51,7 +50,6 @@ public class DataManager {
             workouts.get(date).add(exercise);
             exercises.get(name).add(exercise);
         }
-
         DataManager.workouts = workouts;
         DataManager.exercises = exercises;
     }
