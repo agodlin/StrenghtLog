@@ -79,7 +79,7 @@ public class ExercisesFragment extends Fragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(items, mListener));
+        mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(items, mListener, R.layout.row_view));
         mRecyclerView.setHasFixedSize(true);
         setUpItemTouchHelper();
         setUpAnimationDecoratorHelper();
