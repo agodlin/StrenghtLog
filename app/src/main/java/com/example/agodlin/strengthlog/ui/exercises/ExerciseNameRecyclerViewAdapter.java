@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExercisesFragment.OnListFragmentInteractionListener;
 
 import java.util.ArrayList;
@@ -27,8 +28,39 @@ import java.util.List;
     * https://github.com/ashrithks/SwipeRecyclerView
  */
 public class ExerciseNameRecyclerViewAdapter extends SwipeDeleteAdapter<String> {
+    int mLayoutId;
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.swipe_delete, parent, false);
+        return new ExerciseViewHolder(view, mLayoutId);
+    }
 
     public ExerciseNameRecyclerViewAdapter(List<String> items, OnListFragmentInteractionListener listener, int layoutId) {
-        super(items, listener, layoutId);
+        super(items, listener);
+        mLayoutId = layoutId;
+    }
+
+    @Override
+    public void onBindViewHolderInner(RecyclerView.ViewHolder holder, int position){
+        ExerciseViewHolder viewHolder = (ExerciseViewHolder)holder;
+        viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        final String item = mItems.get(position);
+        viewHolder.titleTextView.setText(item.toString());
+    }
+
+    public static class ExerciseViewHolder extends SwipeDeleteStubViewHolder
+    {
+        TextView titleTextView;
+        public ExerciseViewHolder(View parent, int layoutId)
+        {
+            super(parent, layoutId);
+            titleTextView = (TextView)parent.findViewById(R.id.title_text_view);
+        }
     }
 }
