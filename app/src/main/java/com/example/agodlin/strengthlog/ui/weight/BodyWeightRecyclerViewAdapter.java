@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
+import com.example.agodlin.strengthlog.ui.exercises.ExerciseNameRecyclerViewAdapter;
 import com.example.agodlin.strengthlog.ui.weight.BodyWeightFragment.OnListFragmentInteractionListener;
 import com.example.agodlin.strengthlog.R;
 import java.util.List;
@@ -15,60 +18,47 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class BodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<BodyWeightRecyclerViewAdapter.ViewHolder> {
+public class BodyWeightRecyclerViewAdapter extends SwipeDeleteAdapter<BodyWeightItem> {
 
-    private final List<BodyWeightItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
-
-    public BodyWeightRecyclerViewAdapter(List<BodyWeightItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public BodyWeightRecyclerViewAdapter(List<BodyWeightItem> items) {
+        super(items);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_bodyweight, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+                .inflate(R.layout.swipe_delete, parent, false);
+        return new ViewHolder(view, R.layout.fragment_bodyweight);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).date.toString());
-        holder.mContentView.setText(String.valueOf(mValues.get(position).weight));
+    public void onBindViewHolderInner(RecyclerView.ViewHolder holder2, int position){
+        ViewHolder holder = (ViewHolder) holder2;
+        holder.mItem = this.mItems.get(position);
+        holder.mIdView.setText(holder.mItem.date.toString());
+        holder.mContentView.setText(String.valueOf(holder.mItem.weight));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
             }
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return mValues.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends SwipeDeleteStubViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
         public BodyWeightItem mItem;
 
-        public ViewHolder(View view) {
-            super(view);
+        public ViewHolder(View view, int layoutId)
+        {
+            super(view, layoutId);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.weight);
             mContentView = (TextView) view.findViewById(R.id.date);
         }
+
 
         @Override
         public String toString() {

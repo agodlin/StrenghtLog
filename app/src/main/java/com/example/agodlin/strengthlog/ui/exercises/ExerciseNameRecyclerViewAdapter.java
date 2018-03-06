@@ -28,17 +28,16 @@ import java.util.List;
     * https://github.com/ashrithks/SwipeRecyclerView
  */
 public class ExerciseNameRecyclerViewAdapter extends SwipeDeleteAdapter<String> {
-    int mLayoutId;
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.swipe_delete, parent, false);
-        return new ExerciseViewHolder(view, mLayoutId);
+        return new ExerciseViewHolder(view, R.layout.row_view);
     }
 
-    public ExerciseNameRecyclerViewAdapter(List<String> items, OnListFragmentInteractionListener listener, int layoutId) {
-        super(items, listener);
-        mLayoutId = layoutId;
+    public ExerciseNameRecyclerViewAdapter(List<String> items) {
+        super(items);
     }
 
     @Override

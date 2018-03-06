@@ -23,7 +23,6 @@ import java.util.List;
 
 public abstract class SwipeDeleteAdapter<T> extends RecyclerView.Adapter{
     private static final int PENDING_REMOVAL_TIMEOUT = 3000; // 3sec
-    private final ExercisesFragment.OnListFragmentInteractionListener mListener;
     protected List<T> mItems;
     List<T> itemsPendingRemoval;
     int lastInsertedIndex; // so we can add some more mItems for testing purposes
@@ -31,10 +30,9 @@ public abstract class SwipeDeleteAdapter<T> extends RecyclerView.Adapter{
     private Handler handler = new Handler(); // hanlder for running delayed runnables
     HashMap<T, Runnable> pendingRunnables = new HashMap<>(); // map of mItems to pending runnables, so we can cancel a removal if need be
 
-    public SwipeDeleteAdapter(List<T> items, ExercisesFragment.OnListFragmentInteractionListener listener) {
+    public SwipeDeleteAdapter(List<T> items) {
         mItems = items;
         itemsPendingRemoval = new ArrayList<>();
-        mListener = listener;
     }
 
     @Override

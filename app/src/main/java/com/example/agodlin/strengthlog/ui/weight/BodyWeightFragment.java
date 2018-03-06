@@ -22,6 +22,7 @@ import android.widget.EditText;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteFragmnet;
 import com.example.agodlin.strengthlog.utils.FileIO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -82,9 +83,11 @@ public class BodyWeightFragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.setAdapter(new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems, mListener));
+        mRecyclerView.setAdapter(new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems));
 
-
+        SwipeDeleteFragmnet swipeDeleteFragmnet = new SwipeDeleteFragmnet(getActivity(), mRecyclerView);
+        swipeDeleteFragmnet.setUpItemTouchHelper();
+        swipeDeleteFragmnet.setUpAnimationDecoratorHelper();
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_weight_in_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
