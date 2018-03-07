@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutsFragment.OnListFragmentInteractionListener;
 import com.example.agodlin.strengthlog.utils.OnLoadMoreListener;
 
@@ -19,16 +21,14 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class MyItemRecyclerViewAdapter extends SwipeDeleteAdapter<Date>{
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
 
-
-    private final List<Date> mValues;
     private final OnListFragmentInteractionListener mListener;
 
     public MyItemRecyclerViewAdapter(List<Date> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
+        super(items);
         mListener = listener;
     }
 
@@ -36,20 +36,20 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_item, parent, false);
-            return new ViewHolder(view);
+                    .inflate(R.layout.swipe_delete, parent, false);
+            return new ViewHolder(view, R.layout.fragment_item);
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.loading_items, parent, false);
-        return new LoadingViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.swipe_delete, parent, false);
+        return new LoadingViewHolder(view,R.layout.loading_items);
 
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolderInner(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolder) {
             final ViewHolder viewHolder = (ViewHolder) holder;
-            viewHolder.mItem = mValues.get(position);
-            viewHolder.mIdView.setText(mValues.get(position).toString());
+            viewHolder.mItem = mItems.get(position);
+            viewHolder.mIdView.setText(mItems.get(position).toString());
 
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -68,23 +68,18 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
-    public int getItemCount() {
-        return mValues == null ? 0 : mValues.size();
-    }
-
-    @Override
     public int getItemViewType(int position) {
-        return mValues.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mItems.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends SwipeDeleteStubViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
         public Date mItem;
 
-        public ViewHolder(View view) {
-            super(view);
+        public ViewHolder(View view, int layoutId) {
+            super(view, layoutId);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
@@ -96,11 +91,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    static class LoadingViewHolder extends RecyclerView.ViewHolder {
+    static class LoadingViewHolder extends SwipeDeleteStubViewHolder {
         public ProgressBar progressBar;
 
-        public LoadingViewHolder(View itemView) {
-            super(itemView);
+        public LoadingViewHolder(View itemView, int layoutId) {
+            super(itemView, layoutId);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
         }
     }

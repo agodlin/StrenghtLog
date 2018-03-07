@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteFragmnet;
 import com.example.agodlin.strengthlog.utils.OnLoadMoreListener;
 
 import java.util.ArrayList;
@@ -88,6 +89,10 @@ public class WorkoutsFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
+        SwipeDeleteFragmnet swipeDeleteFragmnet = new SwipeDeleteFragmnet(getActivity(), recyclerView);
+        swipeDeleteFragmnet.setUpItemTouchHelper();
+        swipeDeleteFragmnet.setUpAnimationDecoratorHelper();
+
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);
 
