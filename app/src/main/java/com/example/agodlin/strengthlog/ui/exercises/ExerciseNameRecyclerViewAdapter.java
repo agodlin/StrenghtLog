@@ -28,6 +28,7 @@ import java.util.List;
     * https://github.com/ashrithks/SwipeRecyclerView
  */
 public class ExerciseNameRecyclerViewAdapter extends SwipeDeleteAdapter<String> {
+    OnListFragmentInteractionListener mListener;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,17 +37,18 @@ public class ExerciseNameRecyclerViewAdapter extends SwipeDeleteAdapter<String> 
         return new ExerciseViewHolder(view, R.layout.row_view);
     }
 
-    public ExerciseNameRecyclerViewAdapter(List<String> items) {
+    public ExerciseNameRecyclerViewAdapter(List<String> items, OnListFragmentInteractionListener listener) {
         super(items);
+        mListener = listener;
     }
 
     @Override
     public void onBindViewHolderInner(RecyclerView.ViewHolder holder, int position){
-        ExerciseViewHolder viewHolder = (ExerciseViewHolder)holder;
+        final ExerciseViewHolder viewHolder = (ExerciseViewHolder)holder;
         viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mListener.onListFragmentInteraction(viewHolder.titleTextView.getText().toString());
             }
         });
         final String item = mItems.get(position);

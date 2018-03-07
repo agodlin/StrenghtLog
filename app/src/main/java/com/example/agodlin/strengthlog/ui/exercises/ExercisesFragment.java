@@ -80,7 +80,7 @@ public class ExercisesFragment extends Fragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(items));
+        mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(items, mListener));
         mRecyclerView.setHasFixedSize(true);
         SwipeDeleteFragmnet swipeDeleteFragmnet = new SwipeDeleteFragmnet(getActivity(), mRecyclerView);
         swipeDeleteFragmnet.setUpItemTouchHelper();

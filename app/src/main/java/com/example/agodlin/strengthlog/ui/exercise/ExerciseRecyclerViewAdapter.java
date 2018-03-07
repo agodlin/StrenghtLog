@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
 import java.util.List;
@@ -25,14 +27,13 @@ import java.util.List;
  * specified {@link ExerciseFragment.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRecyclerViewAdapter.ViewHolder> {
+public class ExerciseRecyclerViewAdapter extends SwipeDeleteAdapter<Exercise> {
     private static final String TAG = "ExerciseAdapter";
 
-    private String exercise;
-    List<Exercise> mValues;
     int viewType;
+
     public ExerciseRecyclerViewAdapter(List<Exercise> exercises, int viewType) {
-        this.mValues = exercises;
+        super(exercises);
         this.viewType = viewType;
     }
 
@@ -46,14 +47,16 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_exercise, parent, false);
-        return new ViewHolder(view, parent.getContext(), viewType);
+                .inflate(R.layout.swipe_delete, parent, false);
+        return new ViewHolder(view, parent.getContext(), R.layout.fragment_exercise, viewType);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolderInner(final RecyclerView.ViewHolder holder2, int position) {
 
-        final Exercise exerciseDay = mValues.get(position);
+        final ViewHolder holder = (ViewHolder)holder2;
+
+        final Exercise exerciseDay = mItems.get(position);
         String header = holder.viewType == 0 ? exerciseDay.name : exerciseDay.date.toString();
 
         holder.header.setText(header);
@@ -111,20 +114,16 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return mValues.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends SwipeDeleteStubViewHolder {
         public final RecyclerView recyclerView;
         public final TextView header;
         public final TextView footer;
         public final ImageButton imageButton;
         public final Context context;
         public final int viewType;
-        public ViewHolder(View view, Context context, int viewType) {
-            super(view);
+
+        public ViewHolder(View view, Context context, int layoutId,int viewType) {
+            super(view, layoutId);
             recyclerView = (RecyclerView)itemView.findViewById(R.id.list);
             header = (TextView)itemView.findViewById(R.id.card_header);
             footer = (TextView)itemView.findViewById(R.id.card_footer);

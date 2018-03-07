@@ -20,6 +20,7 @@ import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
+import com.example.agodlin.strengthlog.ui.common.SwipeDeleteFragmnet;
 import com.example.agodlin.strengthlog.ui.exercise.ExerciseRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -93,7 +94,9 @@ public class ExerciseFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
         recyclerView.setAdapter(new ExerciseRecyclerViewAdapter(mValues, 1));
-
+        SwipeDeleteFragmnet swipeDeleteFragmnet = new SwipeDeleteFragmnet(getActivity(), recyclerView);
+        swipeDeleteFragmnet.setUpItemTouchHelper();
+        swipeDeleteFragmnet.setUpAnimationDecoratorHelper();
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
