@@ -227,27 +227,34 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 // Specify arguments in placeholder order.
         String[] selectionArgs = { String.valueOf(bodyWeightItem._ID) };
 // Issue SQL statement.
-        int nRows = db.delete(BodyWeightContract.TableEntry.TABLE_NAME, selection, selectionArgs);
-        if (nRows != 1)
-            Log.i("SQL", "Error delete expected single row but was: " +nRows);
+        int count = db.delete(BodyWeightContract.TableEntry.TABLE_NAME, selection, selectionArgs);
+        if (count != 1)
+            Log.i("SQL", "Error delete expected single row but was: " + count);
     }
 
-    void update(Exercise exercise)
+    public void update(Exercise exercise)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
 // New value for one column
         ContentValues values = new ContentValues();
-        values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, exercise.date.toString());
+        Calendar calendar = Calendar.getInstance();
+        Gson gson = new Gson();
+        calendar.set(exercise.date.year, exercise.date.month, exercise.date.day);
+        values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, calendar.getTimeInMillis());
+        values.put(ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE, exercise.name);
+        values.put(ExerciseContract.TableEntry.COLUMN_NAME_SET, gson.toJson(exercise.sets));
 
 // Which row to update, based on the title
-        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " LIKE ?";
-        String[] selectionArgs = { "MyTitle" };
+        String selection = ExerciseContract.TableEntry._ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(exercise._id) };
 
         int count = db.update(
                 ExerciseContract.TableEntry.TABLE_NAME,
                 values,
                 selection,
                 selectionArgs);
+        if (count != 1)
+            Log.i("SQL", "Error update expected single row but was: " + count);
     }
 }

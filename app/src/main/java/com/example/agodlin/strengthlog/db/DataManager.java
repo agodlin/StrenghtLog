@@ -79,4 +79,9 @@ public class DataManager {
         appSqlDBHelper.deleteBodyWeight(bodyWeightItem);
         bodyWeightItems = appSqlDBHelper.readBodyWeight();
     }
+
+    public static void updateExercise(Exercise e)
+    {
+        appSqlDBHelper.update(e);
+    }
 }

@@ -21,6 +21,7 @@ import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.ui.common.RecyclerItemTouchHelper;
 import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
@@ -96,10 +97,12 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
                                     // undo is selected, restore the deleted item
                                     adapter.restoreItem(deletedItem, deletedIndex);
- 
+                                    DataManager.updateExercise(exerciseDay);
+
                                 }
                             });
-                             snackbar.setActionTextColor(Color.YELLOW);
+                            DataManager.updateExercise(exerciseDay);
+                            snackbar.setActionTextColor(Color.YELLOW);
                             snackbar.show();
                         }
                     }
