@@ -9,10 +9,9 @@ import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
+import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
+import com.example.agodlin.strengthlog.ui.weight.BodyWeightItem;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutsFragment.OnListFragmentInteractionListener;
-import com.example.agodlin.strengthlog.utils.OnLoadMoreListener;
 
 import java.util.List;
 
@@ -21,31 +20,31 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends SwipeDeleteAdapter<Date>{
+public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
 
     private final OnListFragmentInteractionListener mListener;
-
+    List<Date> mItems;
     public MyItemRecyclerViewAdapter(List<Date> items, OnListFragmentInteractionListener listener) {
-        super(items);
         mListener = listener;
+        mItems = items;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.swipe_delete, parent, false);
-            return new ViewHolder(view, R.layout.fragment_item);
+                    .inflate(R.layout.recycler_swipe_delete, parent, false);
+            return new ViewHolder(view);
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.swipe_delete, parent, false);
-        return new LoadingViewHolder(view,R.layout.loading_items);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_swipe_delete, parent, false);
+        return new LoadingViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolderInner(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolder) {
             final ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.mItem = mItems.get(position);
@@ -72,14 +71,33 @@ public class MyItemRecyclerViewAdapter extends SwipeDeleteAdapter<Date>{
         return mItems.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
-    public class ViewHolder extends SwipeDeleteStubViewHolder {
+    @Override
+    public int getItemCount() {
+        return mItems.size();
+    }
+
+    public void removeItem(int position) {
+        mItems.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Date item, int position) {
+        mItems.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    public class ViewHolder extends SwipeViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
         public Date mItem;
 
-        public ViewHolder(View view, int layoutId) {
-            super(view, layoutId);
+        public ViewHolder(View view) {
+            super(view, R.layout.fragment_item);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
@@ -91,11 +109,11 @@ public class MyItemRecyclerViewAdapter extends SwipeDeleteAdapter<Date>{
         }
     }
 
-    static class LoadingViewHolder extends SwipeDeleteStubViewHolder {
+    static class LoadingViewHolder extends SwipeViewHolder {
         public ProgressBar progressBar;
 
-        public LoadingViewHolder(View itemView, int layoutId) {
-            super(itemView, layoutId);
+        public LoadingViewHolder(View itemView) {
+            super(itemView, R.layout.loading_items);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
         }
     }

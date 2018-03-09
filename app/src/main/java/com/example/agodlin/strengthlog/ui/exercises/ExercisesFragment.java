@@ -3,18 +3,11 @@ package com.example.agodlin.strengthlog.ui.exercises;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +16,6 @@ import android.widget.EditText;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.db.DataManager;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteFragmnet;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,9 +74,6 @@ public class ExercisesFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(items, mListener));
         mRecyclerView.setHasFixedSize(true);
-        SwipeDeleteFragmnet swipeDeleteFragmnet = new SwipeDeleteFragmnet(getActivity(), mRecyclerView);
-        swipeDeleteFragmnet.setUpItemTouchHelper();
-        swipeDeleteFragmnet.setUpAnimationDecoratorHelper();
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {

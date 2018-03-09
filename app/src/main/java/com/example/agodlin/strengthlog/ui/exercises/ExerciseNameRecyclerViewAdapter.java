@@ -1,23 +1,15 @@
 package com.example.agodlin.strengthlog.ui.exercises;
 
-import android.graphics.Color;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
+import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExercisesFragment.OnListFragmentInteractionListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,40 +19,44 @@ import java.util.List;
     * https://github.com/nemanja-kovacevic/recycler-view-swipe-to-delete/
     * https://github.com/ashrithks/SwipeRecyclerView
  */
-public class ExerciseNameRecyclerViewAdapter extends SwipeDeleteAdapter<String> {
+public class ExerciseNameRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseNameRecyclerViewAdapter.ExerciseViewHolder> {
     OnListFragmentInteractionListener mListener;
-
+    List<String> mItems;
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ExerciseNameRecyclerViewAdapter.ExerciseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.swipe_delete, parent, false);
-        return new ExerciseViewHolder(view, R.layout.row_view);
+                .inflate(R.layout.recycler_swipe_delete, parent, false);
+        return new ExerciseViewHolder(view);
     }
 
     public ExerciseNameRecyclerViewAdapter(List<String> items, OnListFragmentInteractionListener listener) {
-        super(items);
         mListener = listener;
+        mItems = items;
     }
 
     @Override
-    public void onBindViewHolderInner(RecyclerView.ViewHolder holder, int position){
-        final ExerciseViewHolder viewHolder = (ExerciseViewHolder)holder;
-        viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(final ExerciseNameRecyclerViewAdapter.ExerciseViewHolder holder, int position){
+        holder.titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onListFragmentInteraction(viewHolder.titleTextView.getText().toString());
+                mListener.onListFragmentInteraction(holder.titleTextView.getText().toString());
             }
         });
         final String item = mItems.get(position);
-        viewHolder.titleTextView.setText(item.toString());
+        holder.titleTextView.setText(item.toString());
     }
 
-    public static class ExerciseViewHolder extends SwipeDeleteStubViewHolder
+    @Override
+    public int getItemCount() {
+        return mItems.size();
+    }
+
+    public static class ExerciseViewHolder extends SwipeViewHolder
     {
         TextView titleTextView;
-        public ExerciseViewHolder(View parent, int layoutId)
+        public ExerciseViewHolder(View parent)
         {
-            super(parent, layoutId);
+            super(parent, R.layout.row_view);
             titleTextView = (TextView)parent.findViewById(R.id.title_text_view);
         }
     }

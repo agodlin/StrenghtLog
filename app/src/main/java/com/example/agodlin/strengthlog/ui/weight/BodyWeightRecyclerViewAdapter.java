@@ -4,13 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
-import com.example.agodlin.strengthlog.ui.exercises.ExerciseNameRecyclerViewAdapter;
+import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.weight.BodyWeightFragment.OnListFragmentInteractionListener;
 import com.example.agodlin.strengthlog.R;
 import java.util.List;
@@ -32,7 +28,7 @@ public class BodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<BodyWeig
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_bodyweight, parent, false);
+                .inflate(R.layout.recycler_swipe_delete, parent, false);
         return new ViewHolder(view);
     }
 
@@ -69,20 +65,18 @@ public class BodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<BodyWeig
         notifyItemInserted(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends SwipeViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+
         public BodyWeightItem mItem;
-        public RelativeLayout viewBackground, viewForeground;
         public ViewHolder(View view)
         {
-            super(view);
+            super(view, R.layout.fragment_bodyweight);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.weight);
             mContentView = (TextView) view.findViewById(R.id.date);
-            viewBackground = (RelativeLayout)view.findViewById(R.id.view_background);
-            viewForeground = (RelativeLayout)view.findViewById(R.id.view_foreground);
         }
 
 

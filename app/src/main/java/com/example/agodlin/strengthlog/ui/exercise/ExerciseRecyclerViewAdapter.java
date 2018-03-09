@@ -14,10 +14,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
+import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
-import com.example.agodlin.strengthlog.ui.common.SwipeDeleteStubViewHolder;
+import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
 import java.util.List;
@@ -27,14 +27,14 @@ import java.util.List;
  * specified {@link ExerciseFragment.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class ExerciseRecyclerViewAdapter extends SwipeDeleteAdapter<Exercise> {
+public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "ExerciseAdapter";
-
+    protected List<Exercise> mItems;
     int viewType;
 
     public ExerciseRecyclerViewAdapter(List<Exercise> exercises, int viewType) {
-        super(exercises);
         this.viewType = viewType;
+        mItems = exercises;
     }
 
     @Override
@@ -45,17 +45,19 @@ public class ExerciseRecyclerViewAdapter extends SwipeDeleteAdapter<Exercise> {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.swipe_delete, parent, false);
-        return new ViewHolder(view, parent.getContext(), R.layout.fragment_exercise, viewType);
+    public int getItemCount() {
+        return mItems.size();
     }
 
     @Override
-    public void onBindViewHolderInner(final RecyclerView.ViewHolder holder2, int position) {
+    public ExerciseRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recycler_swipe_delete, parent, false);
+        return new ViewHolder(view, parent.getContext(), viewType);
+    }
 
-        final ViewHolder holder = (ViewHolder)holder2;
-
+    @Override
+    public void onBindViewHolder(final ExerciseRecyclerViewAdapter.ViewHolder holder, int position) {
         final Exercise exerciseDay = mItems.get(position);
         String header = holder.viewType == 0 ? exerciseDay.name : exerciseDay.date.toString();
 
@@ -114,7 +116,21 @@ public class ExerciseRecyclerViewAdapter extends SwipeDeleteAdapter<Exercise> {
         });
     }
 
-    public class ViewHolder extends SwipeDeleteStubViewHolder {
+    public void removeItem(int position) {
+        mItems.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Exercise item, int position) {
+        mItems.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    public class ViewHolder extends SwipeViewHolder {
         public final RecyclerView recyclerView;
         public final TextView header;
         public final TextView footer;
@@ -122,8 +138,8 @@ public class ExerciseRecyclerViewAdapter extends SwipeDeleteAdapter<Exercise> {
         public final Context context;
         public final int viewType;
 
-        public ViewHolder(View view, Context context, int layoutId,int viewType) {
-            super(view, layoutId);
+        public ViewHolder(View view, Context context, int viewType) {
+            super(view, R.layout.fragment_exercise);
             recyclerView = (RecyclerView)itemView.findViewById(R.id.list);
             header = (TextView)itemView.findViewById(R.id.card_header);
             footer = (TextView)itemView.findViewById(R.id.card_footer);
