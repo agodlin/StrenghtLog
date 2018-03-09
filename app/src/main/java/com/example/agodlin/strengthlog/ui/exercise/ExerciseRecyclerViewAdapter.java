@@ -3,20 +3,25 @@ package com.example.agodlin.strengthlog.ui.exercise;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
 import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.ui.common.RecyclerItemTouchHelper;
 import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
@@ -31,10 +36,11 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
     private static final String TAG = "ExerciseAdapter";
     protected List<Exercise> mItems;
     int viewType;
-
-    public ExerciseRecyclerViewAdapter(List<Exercise> exercises, int viewType) {
+    final RelativeLayout relativeLayout;
+    public ExerciseRecyclerViewAdapter(List<Exercise> exercises, int viewType, RelativeLayout relativeLayout) {
         this.viewType = viewType;
         mItems = exercises;
+        this.relativeLayout = relativeLayout;
     }
 
     @Override
@@ -63,7 +69,43 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
 
         holder.header.setText(header);
         holder.footer.setText("comment");
-        holder.recyclerView.setAdapter(new ExerciseCardRecyclerViewAdapter(exerciseDay.sets));
+        final ExerciseCardRecyclerViewAdapter adapter = new ExerciseCardRecyclerViewAdapter(exerciseDay.sets);
+        holder.recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT,
+                new RecyclerItemTouchHelper.RecyclerItemTouchHelperListener() {
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position)
+                    {
+                        if (viewHolder instanceof ExerciseCardRecyclerViewAdapter.ViewHolder) {
+                            // get the removed item name to display it in snack bar
+                            String name = exerciseDay.sets.get(viewHolder.getAdapterPosition()).toString();
+
+                            // backup of removed item for undo purpose
+                            final Set deletedItem = exerciseDay.sets.get(viewHolder.getAdapterPosition());
+                            final int deletedIndex = viewHolder.getAdapterPosition();
+
+                            // remove the item from recycler view
+                            adapter.removeItem(viewHolder.getAdapterPosition());
+
+                            // showing snack bar with Undo option
+                            Snackbar snackbar = Snackbar
+                                    .make(relativeLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+                            snackbar.setAction("UNDO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    // undo is selected, restore the deleted item
+                                    adapter.restoreItem(deletedItem, deletedIndex);
+ 
+                                }
+                            });
+                             snackbar.setActionTextColor(Color.YELLOW);
+                            snackbar.show();
+                        }
+                    }
+                });
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(holder.recyclerView);
+
         holder.recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

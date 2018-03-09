@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Set;
+import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
+import com.example.agodlin.strengthlog.ui.weight.BodyWeightItem;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<Exerci
     @Override
     public ExerciseCardRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.exercise_cardview_list_item, parent, false);
+                .inflate(R.layout.recycler_swipe_delete, parent, false);
         return new ExerciseCardRecyclerViewAdapter.ViewHolder(view, parent.getContext());
     }
 
@@ -42,11 +44,25 @@ public class ExerciseCardRecyclerViewAdapter extends RecyclerView.Adapter<Exerci
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public void removeItem(int position) {
+        mValues.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Set item, int position) {
+        mValues.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    public class ViewHolder extends SwipeViewHolder {
         public final TextView setInfo;
         public Set mItem;
         public ViewHolder(View view, Context context) {
-            super(view);
+            super(view, R.layout.exercise_cardview_list_item);
             setInfo = (TextView)itemView.findViewById(R.id.set_info);
         }
 
