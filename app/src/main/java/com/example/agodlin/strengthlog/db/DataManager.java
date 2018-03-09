@@ -21,14 +21,14 @@ public class DataManager {
     public static Map<String, List<Exercise>> exercises = new HashMap<>();
     public static List<Exercise> exercisesList = new ArrayList<>();
     public static List<BodyWeightItem> bodyWeightItems;
-
+    private  static AppSqlDBHelper appSqlDBHelper;
     public static void init(Context context)
     {
         Map<Date, List<Exercise>> workouts = new HashMap<>();
         Map<String, List<Exercise>> exercises = new HashMap<>();
         //TODO readPrivate from database
+        appSqlDBHelper = new AppSqlDBHelper(context);
 
-        AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
         List<Exercise> exerciseList= appSqlDBHelper.readAll();
         bodyWeightItems = appSqlDBHelper.readBodyWeight();
         setAll(exerciseList);
@@ -67,5 +67,16 @@ public class DataManager {
     static public void addNewWorkout(Date date)
     {
         workouts.put(date, new ArrayList<Exercise>());
+    }
+
+    public static void delete(Exercise e)
+    {
+        appSqlDBHelper.deleteExercise(e);
+    }
+
+    public static void delete(BodyWeightItem bodyWeightItem)
+    {
+        appSqlDBHelper.deleteBodyWeight(bodyWeightItem);
+        bodyWeightItems = appSqlDBHelper.readBodyWeight();
     }
 }

@@ -19,9 +19,10 @@ import java.util.List;
  * TODO: Replace the implementation with code for your data type.
  */
 public class BodyWeightRecyclerViewAdapter extends SwipeDeleteAdapter<BodyWeightItem> {
-
-    public BodyWeightRecyclerViewAdapter(List<BodyWeightItem> items) {
+    private OnListFragmentInteractionListener mListener;
+    public BodyWeightRecyclerViewAdapter(List<BodyWeightItem> items, OnListFragmentInteractionListener mListener) {
         super(items);
+        this.mListener = mListener;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class BodyWeightRecyclerViewAdapter extends SwipeDeleteAdapter<BodyWeight
 
     @Override
     public void onBindViewHolderInner(RecyclerView.ViewHolder holder2, int position){
-        ViewHolder holder = (ViewHolder) holder2;
+        final ViewHolder holder = (ViewHolder) holder2;
         holder.mItem = this.mItems.get(position);
         holder.mIdView.setText(holder.mItem.date.toString());
         holder.mContentView.setText(String.valueOf(holder.mItem.weight));
@@ -41,6 +42,7 @@ public class BodyWeightRecyclerViewAdapter extends SwipeDeleteAdapter<BodyWeight
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mListener.onListFragmentInteraction(holder.mItem);
             }
         });
     }

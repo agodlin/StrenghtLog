@@ -206,15 +206,30 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         return items;
     }
 
-    void deleteExercise()
+    public void deleteExercise(Exercise e)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         // Define 'where' part of query.
-        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " LIKE ?";
+        String selection = ExerciseContract.TableEntry._ID + " LIKE ?";
 // Specify arguments in placeholder order.
-        String[] selectionArgs = { "MyTitle" };
+        String[] selectionArgs = { String.valueOf(e._id) };
 // Issue SQL statement.
-        db.delete(ExerciseContract.TableEntry.TABLE_NAME, selection, selectionArgs);
+        int nRows = db.delete(ExerciseContract.TableEntry.TABLE_NAME, selection, selectionArgs);
+        if (nRows != 1)
+            Log.i("SQL", "Error delete expected single row but was: " +nRows);
+    }
+
+    public void deleteBodyWeight(BodyWeightItem bodyWeightItem)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Define 'where' part of query.
+        String selection = ExerciseContract.TableEntry._ID + " LIKE ?";
+// Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(bodyWeightItem._ID) };
+// Issue SQL statement.
+        int nRows = db.delete(BodyWeightContract.TableEntry.TABLE_NAME, selection, selectionArgs);
+        if (nRows != 1)
+            Log.i("SQL", "Error delete expected single row but was: " +nRows);
     }
 
     void update(Exercise exercise)

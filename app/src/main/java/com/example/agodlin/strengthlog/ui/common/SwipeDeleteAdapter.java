@@ -3,16 +3,7 @@ package com.example.agodlin.strengthlog.ui.common;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.Button;
-import android.widget.TextView;
-
-import com.example.agodlin.strengthlog.R;
-import com.example.agodlin.strengthlog.ui.exercises.ExercisesFragment;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

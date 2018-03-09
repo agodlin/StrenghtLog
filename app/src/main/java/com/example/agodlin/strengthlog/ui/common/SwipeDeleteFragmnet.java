@@ -23,8 +23,8 @@ public class SwipeDeleteFragmnet {
     RecyclerView mRecyclerView;
     public SwipeDeleteFragmnet(Context context, RecyclerView recyclerView)
     {
-this.context = context;
-this.mRecyclerView = recyclerView;
+        this.context = context;
+        this.mRecyclerView = recyclerView;
     }
 
     public void setUpItemTouchHelper() {
@@ -195,5 +195,4 @@ this.mRecyclerView = recyclerView;
 
         });
     }
-
 }

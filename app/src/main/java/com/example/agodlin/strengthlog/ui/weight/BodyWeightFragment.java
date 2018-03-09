@@ -83,7 +83,7 @@ public class BodyWeightFragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.setAdapter(new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems));
+        mRecyclerView.setAdapter(new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems, mListener));
 
         SwipeDeleteFragmnet swipeDeleteFragmnet = new SwipeDeleteFragmnet(getActivity(), mRecyclerView);
         swipeDeleteFragmnet.setUpItemTouchHelper();
