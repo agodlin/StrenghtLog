@@ -3,12 +3,15 @@ package com.example.agodlin.strengthlog.ui.weight;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
@@ -38,7 +43,7 @@ import java.util.Comparator;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class BodyWeightFragment extends Fragment {
+public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private static final String TAG = "BodyWeightFragment";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -46,6 +51,9 @@ public class BodyWeightFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     RecyclerView mRecyclerView;
+    BodyWeightRecyclerViewAdapter mAdapter;
+    RelativeLayout frameLayout;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -83,11 +91,14 @@ public class BodyWeightFragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.setAdapter(new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems, mListener));
+        mAdapter = new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems, mListener);
+        mRecyclerView.setAdapter(mAdapter);
 
-        SwipeDeleteFragmnet swipeDeleteFragmnet = new SwipeDeleteFragmnet(getActivity(), mRecyclerView);
-        swipeDeleteFragmnet.setUpItemTouchHelper();
-        swipeDeleteFragmnet.setUpAnimationDecoratorHelper();
+        frameLayout = (RelativeLayout)view.findViewById(R.id.bodyweight_frag);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_weight_in_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +222,37 @@ public class BodyWeightFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof BodyWeightRecyclerViewAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = DataManager.bodyWeightItems.get(viewHolder.getAdapterPosition()).date.toString();
+
+            // backup of removed item for undo purpose
+            final BodyWeightItem deletedItem = DataManager.bodyWeightItems.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            mAdapter.removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(frameLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    mAdapter.restoreItem(deletedItem, deletedIndex);
+                    deletedItem._ID = DataManager.appSqlDBHelper.insertWeight(deletedItem)._ID;
+                }
+            });
+            DataManager.delete(deletedItem);
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
     }
 
     /**

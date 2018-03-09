@@ -43,7 +43,7 @@ public class Date implements Comparable,Serializable {
 
     public String toString() {
         return day +
-                "-" + month +
+                "-" + (month+1) +
                 "-" + year;
     }
 

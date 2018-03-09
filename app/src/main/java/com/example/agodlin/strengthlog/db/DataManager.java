@@ -21,7 +21,7 @@ public class DataManager {
     public static Map<String, List<Exercise>> exercises = new HashMap<>();
     public static List<Exercise> exercisesList = new ArrayList<>();
     public static List<BodyWeightItem> bodyWeightItems;
-    private  static AppSqlDBHelper appSqlDBHelper;
+    public  static AppSqlDBHelper appSqlDBHelper;
     public static void init(Context context)
     {
         Map<Date, List<Exercise>> workouts = new HashMap<>();

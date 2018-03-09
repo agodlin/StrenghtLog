@@ -2,6 +2,7 @@ package com.example.agodlin.strengthlog.ui.weight;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -9,7 +10,7 @@ import android.view.MenuInflater;
 
 import com.example.agodlin.strengthlog.R;
 
-public class WeightActivity extends AppCompatActivity implements BodyWeightFragment.OnListFragmentInteractionListener {
+public class WeightActivity extends AppCompatActivity implements BodyWeightFragment.OnListFragmentInteractionListener{
     private static String TAG = "WeightActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,4 +53,5 @@ public class WeightActivity extends AppCompatActivity implements BodyWeightFragm
     public void onListFragmentInteraction(BodyWeightItem item) {
         Log.i(TAG, item.date.toString());
     }
+
 }

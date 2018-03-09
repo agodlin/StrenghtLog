@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.agodlin.strengthlog.ui.common.SwipeDeleteAdapter;
@@ -18,23 +20,24 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class BodyWeightRecyclerViewAdapter extends SwipeDeleteAdapter<BodyWeightItem> {
+public class BodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<BodyWeightRecyclerViewAdapter.ViewHolder> {
     private OnListFragmentInteractionListener mListener;
+    protected List<BodyWeightItem> mItems;
+
     public BodyWeightRecyclerViewAdapter(List<BodyWeightItem> items, OnListFragmentInteractionListener mListener) {
-        super(items);
+        mItems = items;
         this.mListener = mListener;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.swipe_delete, parent, false);
-        return new ViewHolder(view, R.layout.fragment_bodyweight);
+                .inflate(R.layout.fragment_bodyweight, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolderInner(RecyclerView.ViewHolder holder2, int position){
-        final ViewHolder holder = (ViewHolder) holder2;
+    public void onBindViewHolder(final ViewHolder holder, final int position){
         holder.mItem = this.mItems.get(position);
         holder.mIdView.setText(holder.mItem.date.toString());
         holder.mContentView.setText(String.valueOf(holder.mItem.weight));
@@ -47,18 +50,39 @@ public class BodyWeightRecyclerViewAdapter extends SwipeDeleteAdapter<BodyWeight
         });
     }
 
-    public class ViewHolder extends SwipeDeleteStubViewHolder {
+    @Override
+    public int getItemCount() {
+        return mItems.size();
+    }
+
+    public void removeItem(int position) {
+        mItems.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(BodyWeightItem item, int position) {
+        mItems.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
         public BodyWeightItem mItem;
-
-        public ViewHolder(View view, int layoutId)
+        public RelativeLayout viewBackground, viewForeground;
+        public ViewHolder(View view)
         {
-            super(view, layoutId);
+            super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.weight);
             mContentView = (TextView) view.findViewById(R.id.date);
+            viewBackground = (RelativeLayout)view.findViewById(R.id.view_background);
+            viewForeground = (RelativeLayout)view.findViewById(R.id.view_foreground);
         }
 
 
