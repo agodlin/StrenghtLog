@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public class Exercise {
-    public final long _id;
+    public long _id;
     public final String name;
     public final Date date;
     public final List<Set> sets;

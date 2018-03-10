@@ -104,8 +104,8 @@ public class WorkoutsFragment extends Fragment implements RecyclerItemTouchHelpe
 
         relativeLayout = (RelativeLayout)view.findViewById(R.id.fragment_exercise_layout);
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+        //ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        //new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
         recyclerView.setAdapter(adapter);
 

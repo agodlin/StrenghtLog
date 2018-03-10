@@ -195,10 +195,10 @@ public class ExerciseFragment extends Fragment implements RecyclerItemTouchHelpe
 
                     // undo is selected, restore the deleted item
                     adapter.restoreItem(deletedItem, deletedIndex);
-
+                    deletedItem._id = DataManager.appSqlDBHelper.insert(deletedItem)._id;
                 }
             });
-
+            DataManager.delete(deletedItem);
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }
