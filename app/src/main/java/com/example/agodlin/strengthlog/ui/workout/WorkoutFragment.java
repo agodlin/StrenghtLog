@@ -72,7 +72,7 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
             mDate = (Date)getArguments().getSerializable(ARG_WORKOUT_DATE);
         }
         getActivity().setTitle(mDate.toString());
-        mValues = DataManager.workouts.get(mDate);
+        mValues = DataManager.read(mDate);
     }
 
     @Override
@@ -106,12 +106,12 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
                             public void onClick(DialogInterface dialog, int id) {
                                 String name = input.getText().toString();
                                 //TODO should be able to add a new exercise name
-                                if (name.isEmpty() || !DataManager.exercises.containsKey(name))
+                                if (name.isEmpty() || !DataManager.getNames().contains(name))
                                 {
                                     return;
                                 }
 
-                                Exercise exercise = new Exercise(-1, name, mDate, new ArrayList<Set>());
+                                Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
                                 mValues.add(exercise);
                                 recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
 
@@ -168,7 +168,7 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
 
                     // undo is selected, restore the deleted item
                     adapter.restoreItem(deletedItem, deletedIndex);
-                    deletedItem._id = DataManager.appSqlDBHelper.insert(deletedItem)._id;
+                    DataManager.add(deletedItem);
 
                 }
             });

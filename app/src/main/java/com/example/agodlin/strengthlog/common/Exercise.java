@@ -7,21 +7,18 @@ import java.util.List;
  */
 
 public class Exercise {
-    public long _id;
     public final String name;
     public final Date date;
     public final List<Set> sets;
 
-    public Exercise(long id, String name, Date date, List<Set> sets) {
-        this._id = id;
+    public Exercise(String name, Date date, List<Set> sets) {
         this.name = name;
         this.date = date;
         this.sets = sets;
     }
 
-    public Exercise(long id, Exercise rhs)
+    public Exercise(Exercise rhs)
     {
-        this._id = id;
         this.name = rhs.name;
         this.date = rhs.date;
         this.sets = rhs.sets;
@@ -34,7 +31,6 @@ public class Exercise {
 
         Exercise exercise = (Exercise) o;
 
-        if (_id != exercise._id) return false;
         if (name != null ? !name.equals(exercise.name) : exercise.name != null) return false;
         if (date != null ? !date.equals(exercise.date) : exercise.date != null) return false;
         return sets != null ? sets.equals(exercise.sets) : exercise.sets == null;
@@ -42,7 +38,7 @@ public class Exercise {
 
     @Override
     public int hashCode() {
-        int result = (int) (_id ^ (_id >>> 32));
+        int result = 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (sets != null ? sets.hashCode() : 0);

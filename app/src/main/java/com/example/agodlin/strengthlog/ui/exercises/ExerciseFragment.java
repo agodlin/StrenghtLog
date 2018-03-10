@@ -76,7 +76,7 @@ public class ExerciseFragment extends Fragment implements RecyclerItemTouchHelpe
             exerciseName = getArguments().getString(ARG_EXERCISE_NAME);
         }
         getActivity().setTitle(exerciseName);
-        mValues = DataManager.exercises.get(exerciseName);
+        mValues = DataManager.read(exerciseName);
         Comparator<Exercise> c = new Comparator<Exercise>()
         {
             public int compare(Exercise u1, Exercise u2)
@@ -124,7 +124,7 @@ public class ExerciseFragment extends Fragment implements RecyclerItemTouchHelpe
                                 int day = myDatePicker.getDayOfMonth();
                                 int year = myDatePicker.getYear();
                                 Date date = new Date(day, month, year);
-                                Exercise exercise = new Exercise(-1, exerciseName, date, new ArrayList<Set>());
+                                Exercise exercise = new Exercise(exerciseName, date, new ArrayList<Set>());
                                 Comparator<Exercise> c = new Comparator<Exercise>()
                                 {
                                     public int compare(Exercise u1, Exercise u2)
@@ -195,7 +195,7 @@ public class ExerciseFragment extends Fragment implements RecyclerItemTouchHelpe
 
                     // undo is selected, restore the deleted item
                     adapter.restoreItem(deletedItem, deletedIndex);
-                    deletedItem._id = DataManager.appSqlDBHelper.insert(deletedItem)._id;
+                    DataManager.add(deletedItem);
                 }
             });
             DataManager.delete(deletedItem);

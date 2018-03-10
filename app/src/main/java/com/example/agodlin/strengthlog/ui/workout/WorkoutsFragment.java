@@ -83,7 +83,7 @@ public class WorkoutsFragment extends Fragment implements RecyclerItemTouchHelpe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mItems = new ArrayList<Date>(DataManager.workouts.keySet());
+        mItems = DataManager.getDates();
         Comparator<Date> c = new Comparator<Date>()
         {
             public int compare(Date u1, Date u2)

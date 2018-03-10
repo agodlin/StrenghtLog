@@ -67,7 +67,7 @@ public class ExercisesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercise_name_list, container, false);
-        items = new ArrayList<>(DataManager.exercises.keySet());
+        items = DataManager.getNames();
         Collections.sort(items);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);

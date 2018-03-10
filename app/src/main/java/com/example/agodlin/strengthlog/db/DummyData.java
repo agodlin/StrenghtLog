@@ -75,7 +75,7 @@ public class DummyData {
     static List<Exercise> day1()
     {
         Date date = new Date(10,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 80, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 80, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5,5}, 60)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{3, 1}, 152.5)));
@@ -94,7 +94,7 @@ public class DummyData {
     }
     static List<Exercise> day2() {
         Date date = new Date(11,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 90, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 90, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("bench", date, sets(new int[]{5,5,5,5,5}, 102.5)));
         exerciseList.add(exercise("press", date, sets(new int[]{6,6,6}, 50)));
@@ -112,7 +112,7 @@ public class DummyData {
     }
     static List<Exercise> day3() {
         Date date = new Date(13,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 85, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 85, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5,5,5}, 60)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{5,5,5}, 140)));
@@ -130,7 +130,7 @@ public class DummyData {
     }
     static List<Exercise> day4() {
         Date date = new Date(14,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 81, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 81, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("press", date, sets(new int[]{5,5,5,4,4}, 60)));
         exerciseList.add(exercise("bench", date, sets(new int[]{6,6,6}, 80)));
@@ -148,7 +148,7 @@ public class DummyData {
     }
     static List<Exercise> day5() {
         Date date = new Date(17,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 79, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 79, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5,5}, 60)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{3}, 150)));
@@ -167,7 +167,7 @@ public class DummyData {
     }
     static List<Exercise> day6() {
         Date date = new Date(18,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 75, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 75, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("bench", date, sets(new int[]{5,3,3,3,3,3,3,3}, 105)));
         exerciseList.add(exercise("press", date, sets(new int[]{7,6,5}, 50)));
@@ -185,7 +185,7 @@ public class DummyData {
     }
     static List<Exercise> day7() {
         Date date = new Date(20,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 80, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 80, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5,5,5}, 60)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{5,5,4}, 142.5)));
@@ -202,7 +202,7 @@ public class DummyData {
     }
     static List<Exercise> day8() {
         Date date = new Date(21,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 88, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 88, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("press", date, sets(new int[]{5,5,5,5,5}, 60)));
         exerciseList.add(exercise("bench", date, sets(new int[]{8,8,8}, 80)));
@@ -220,7 +220,7 @@ public class DummyData {
 
     static List<Exercise> day9() {
         Date date = new Date(24,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 87, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 87, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5,5}, 65)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{10,10,10}, 100)));
@@ -237,7 +237,7 @@ public class DummyData {
     }
     static List<Exercise> day10() {
         Date date = new Date(25,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 86, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 86, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("bench", date, sets(new int[]{5,5,5,5,4}, 105)));
         exerciseList.add(exercise("press", date, sets(new int[]{6,6,6}, 50)));
@@ -254,7 +254,7 @@ public class DummyData {
     }
     static List<Exercise> day11() {
         Date date = new Date(27,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 85, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 85, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5}, 70)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{5,5,5,5}, 140)));
@@ -271,7 +271,7 @@ public class DummyData {
     }
     static List<Exercise> day12() {
         Date date = new Date(28,11,2017);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 84, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 84, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("press", date, sets(new int[]{5,5,4,3,4}, 62)));
         exerciseList.add(exercise("bench", date, sets(new int[]{8,8,8}, 83)));
@@ -289,7 +289,7 @@ public class DummyData {
 
     static List<Exercise> day13() {
         Date date = new Date(14,0,2018);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 83, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 83, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5,5}, 65)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{10,10,10}, 100)));
@@ -306,7 +306,7 @@ public class DummyData {
     }
     static List<Exercise> day14() {
         Date date = new Date(15,0,2018);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 82, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 82, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("bench", date, sets(new int[]{5,5,5,5,4}, 105)));
         exerciseList.add(exercise("press", date, sets(new int[]{6,6,6}, 50)));
@@ -323,7 +323,7 @@ public class DummyData {
     }
     static List<Exercise> day15() {
         Date date = new Date(17,0,2018);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 81, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 81, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("squat", date, sets(new int[]{5,5}, 70)));
         exerciseList.add(exercise("deadlift", date, sets(new int[]{5,5,5,5}, 140)));
@@ -340,7 +340,7 @@ public class DummyData {
     }
     static List<Exercise> day16() {
         Date date = new Date(18,0,2018);
-        bodyWeightItems.add(new BodyWeightItem(-1, date, 95, ""));
+        bodyWeightItems.add(new BodyWeightItem(date, 95, ""));
         List<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(exercise("press", date, sets(new int[]{5,5,4,3,4}, 62)));
         exerciseList.add(exercise("bench", date, sets(new int[]{8,8,8}, 83)));
@@ -358,7 +358,7 @@ public class DummyData {
 
     public static Exercise exercise(String name, Date date,List<Set> sets)
     {
-        return new Exercise(-1, name, date,sets);
+        return new Exercise(name, date,sets);
     }
 
     static Set set(int reps, double weight)

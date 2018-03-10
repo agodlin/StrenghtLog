@@ -34,6 +34,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -89,7 +90,7 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mAdapter = new BodyWeightRecyclerViewAdapter(DataManager.bodyWeightItems, mListener);
+        mAdapter = new BodyWeightRecyclerViewAdapter(DataManager.readBodyWeight(), mListener);
         mRecyclerView.setAdapter(mAdapter);
 
         frameLayout = (RelativeLayout)view.findViewById(R.id.bodyweight_frag);
@@ -134,7 +135,7 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
                                                 Date date = new Date(day, month, year);
                                                 Log.d(TAG, "date value : " + date.toString());
                                                 float weight = Float.valueOf(weightString);
-                                                BodyWeightItem bodyWeightItem = new BodyWeightItem(-1, date,
+                                                BodyWeightItem bodyWeightItem = new BodyWeightItem(date,
                                                         weight, "");
                                                 Comparator<BodyWeightItem> c = new Comparator<BodyWeightItem>()
                                                 {
@@ -143,11 +144,11 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
                                                         return u1.date.compareTo(u2.date);
                                                     }
                                                 };
-                                                int position = Collections.binarySearch(DataManager.bodyWeightItems, bodyWeightItem, c);
+                                                int position = Collections.binarySearch(DataManager.readBodyWeight(), bodyWeightItem, c);
                                                 if (position < 0) {
                                                     Log.d(TAG, "BodyWeightItem insert position : " + position + " value : " + bodyWeightItem.toString());
                                                     position = position * -1 - 1;
-                                                    DataManager.bodyWeightItems.add(position, bodyWeightItem);
+                                                    DataManager.add(bodyWeightItem, position);
                                                     mRecyclerView.getAdapter().notifyItemInserted(position);
                                                 }
                                                 else {
@@ -187,7 +188,7 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
         switch (item.getItemId()) {
             case R.id.action_export: {
                 Gson gson = new Gson();
-                String jsonString = gson.toJson(DataManager.bodyWeightItems);
+                String jsonString = gson.toJson(DataManager.readBodyWeight());
                 Log.i(TAG, "BodyWeightContent json value : " + jsonString);
                 String filename = "bodyweight.json";
                 FileIO.writePrivate(jsonString.getBytes(), getContext(), filename);
@@ -196,7 +197,7 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
                 String filename = "bodyweight.json";
                 String jsonString = new String(FileIO.readPrivate(getContext(), filename));
                 Type listType = new TypeToken<ArrayList<BodyWeightItem>>(){}.getType();
-                DataManager.bodyWeightItems = new Gson().fromJson(jsonString, listType);
+                DataManager.addBodyWeight((List<BodyWeightItem>)new Gson().fromJson(jsonString, listType));
             }
             default:
                 break;
@@ -226,10 +227,10 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof BodyWeightRecyclerViewAdapter.ViewHolder) {
             // get the removed item name to display it in snack bar
-            String name = DataManager.bodyWeightItems.get(viewHolder.getAdapterPosition()).date.toString();
+            String name = mAdapter.mItems.get(viewHolder.getAdapterPosition()).date.toString();
 
             // backup of removed item for undo purpose
-            final BodyWeightItem deletedItem = DataManager.bodyWeightItems.get(viewHolder.getAdapterPosition());
+            final BodyWeightItem deletedItem = mAdapter.mItems.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view
@@ -244,7 +245,7 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
 
                     // undo is selected, restore the deleted item
                     mAdapter.restoreItem(deletedItem, deletedIndex);
-                    deletedItem._ID = DataManager.appSqlDBHelper.insertWeight(deletedItem)._ID;
+                    DataManager.add(deletedItem);
                 }
             });
             DataManager.delete(deletedItem);

@@ -62,7 +62,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         db.execSQL(BodyWeightContract.SQL_CREATE_ENTRIES);
     }
 
-    public Exercise insert(Exercise exercise)
+    public void insert(Exercise exercise)
     {
         // Gets the data repository in writePrivate mode
         SQLiteDatabase db = this.getWritableDatabase();
@@ -83,12 +83,10 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
             //TODO add exception
             Log.e("AppSqlDBHelper", "inset to db fail");
         }
-        Exercise exercise1 = new Exercise(newRowId, exercise);
 
-        return exercise1;
     }
 
-    public BodyWeightItem insertWeight(BodyWeightItem bodyWeightItem)
+    public void insertWeight(BodyWeightItem bodyWeightItem)
     {
         // Gets the data repository in writePrivate mode
         SQLiteDatabase db = this.getWritableDatabase();
@@ -109,9 +107,6 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
             //TODO add exception
             Log.e("AppSqlDBHelper", "inset to db fail");
         }
-        BodyWeightItem bodyWeightItem1 = new BodyWeightItem(newRowId, bodyWeightItem);
-
-        return bodyWeightItem1;
     }
 
     public List<BodyWeightItem> readBodyWeight()
@@ -153,7 +148,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
             String comment = cursor.getString(3);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(millis);
-            items.add(new BodyWeightItem(_id, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), weight, comment));
+            items.add(new BodyWeightItem(new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), weight, comment));
         }
         cursor.close();
         return items;
@@ -200,7 +195,99 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
             calendar.setTimeInMillis(millis);
             Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
             List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
-            items.add(new Exercise(_id, name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets));
+            items.add(new Exercise(name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets));
+        }
+        cursor.close();
+        return items;
+    }
+
+    public List<Exercise> readAll(String name)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+// Define a projection that specifies which columns from the database
+// you will actually use after this query.
+        String[] projection = {
+                BaseColumns._ID,
+                ExerciseContract.TableEntry.COLUMN_NAME_DATE,
+                ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE,
+                ExerciseContract.TableEntry.COLUMN_NAME_SET
+        };
+
+// Filter results WHERE "title" = 'My Title'
+        String selection = ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE + " = ?";
+        String[] selectionArgs = { name };
+
+// How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                ExerciseContract.TableEntry.COLUMN_NAME_DATE + " DESC";
+
+        Cursor cursor = db.query(
+                ExerciseContract.TableEntry.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        Gson gson = new Gson();
+        List<Exercise> items = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            int _id = cursor.getInt(0);
+            long millis = cursor.getLong(1);
+            String setsJsonString = cursor.getString(3);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(millis);
+            Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
+            List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
+            items.add(new Exercise(name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets));
+        }
+        cursor.close();
+        return items;
+    }
+
+    public List<Exercise> readAll(Date date)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+// Define a projection that specifies which columns from the database
+// you will actually use after this query.
+        String[] projection = {
+                BaseColumns._ID,
+                ExerciseContract.TableEntry.COLUMN_NAME_DATE,
+                ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE,
+                ExerciseContract.TableEntry.COLUMN_NAME_SET
+        };
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(date.year, date.month, date.day);
+// Filter results WHERE "title" = 'My Title'
+        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " = ?";
+        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()) };
+
+// How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                ExerciseContract.TableEntry.COLUMN_NAME_DATE + " DESC";
+
+        Cursor cursor = db.query(
+                ExerciseContract.TableEntry.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        Gson gson = new Gson();
+        List<Exercise> items = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            int _id = cursor.getInt(0);
+            long millis = cursor.getLong(1);
+            String name = cursor.getString(2);
+            String setsJsonString = cursor.getString(3);
+            Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
+            List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
+            items.add(new Exercise(name, new Date(date.day,date.month,date.year), sets));
         }
         cursor.close();
         return items;
@@ -210,9 +297,11 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         // Define 'where' part of query.
-        String selection = ExerciseContract.TableEntry._ID + " LIKE ?";
+        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " = ? AND " + ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE + " = ?";
 // Specify arguments in placeholder order.
-        String[] selectionArgs = { String.valueOf(e._id) };
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(e.date.year, e.date.month, e.date.day);
+        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()), e.name };
 // Issue SQL statement.
         int nRows = db.delete(ExerciseContract.TableEntry.TABLE_NAME, selection, selectionArgs);
         if (nRows != 1)
@@ -223,9 +312,11 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         // Define 'where' part of query.
-        String selection = ExerciseContract.TableEntry._ID + " LIKE ?";
+        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " LIKE ?";
 // Specify arguments in placeholder order.
-        String[] selectionArgs = { String.valueOf(bodyWeightItem._ID) };
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(bodyWeightItem.date.year, bodyWeightItem.date.month, bodyWeightItem.date.day);
+        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()) };
 // Issue SQL statement.
         int count = db.delete(BodyWeightContract.TableEntry.TABLE_NAME, selection, selectionArgs);
         if (count != 1)
@@ -246,9 +337,8 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_SET, gson.toJson(exercise.sets));
 
 // Which row to update, based on the title
-        String selection = ExerciseContract.TableEntry._ID + " LIKE ?";
-        String[] selectionArgs = { String.valueOf(exercise._id) };
-
+        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " = ? AND " + ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE + " = ?";
+        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()), exercise.name };
         int count = db.update(
                 ExerciseContract.TableEntry.TABLE_NAME,
                 values,

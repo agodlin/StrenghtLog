@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.export_exercises) {
             Log.d(TAG, "Saving exercises to file");
-            List<Exercise> exercises = DataManager.readAll();
+            List<Exercise> exercises = DataManager.read();
             Gson gson = new Gson();
             String jsonString = gson.toJson(exercises);
             String filename = "exercises.json";
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity
             String jsonString = new String(FileIO.readPrivate(getApplicationContext(), filename));
             Type listType = new TypeToken<ArrayList<Exercise>>(){}.getType();
             List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
-            DataManager.setAll(exercises);
+            DataManager.add(exercises);
             return true;
         }
 

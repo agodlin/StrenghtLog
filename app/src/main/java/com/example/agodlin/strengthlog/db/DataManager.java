@@ -9,64 +9,108 @@ import com.example.agodlin.strengthlog.ui.weight.BodyWeightItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by agodlin on 7/21/2017.
  */
 
 public class DataManager {
-    public static Map<Date, List<Exercise>> workouts = new HashMap<>();
-    public static Map<String, List<Exercise>> exercises = new HashMap<>();
-    public static List<Exercise> exercisesList = new ArrayList<>();
-    public static List<BodyWeightItem> bodyWeightItems;
-    public  static AppSqlDBHelper appSqlDBHelper;
+    //TODO add cache logic
+
+    private  static AppSqlDBHelper appSqlDBHelper;
+
+    private static List<BodyWeightItem> bodyWeightItems;
+
     public static void init(Context context)
     {
-        Map<Date, List<Exercise>> workouts = new HashMap<>();
-        Map<String, List<Exercise>> exercises = new HashMap<>();
-        //TODO readPrivate from database
         appSqlDBHelper = new AppSqlDBHelper(context);
-
-        List<Exercise> exerciseList= appSqlDBHelper.readAll();
         bodyWeightItems = appSqlDBHelper.readBodyWeight();
-        setAll(exerciseList);
     }
 
-    static public void setAll(List<Exercise> exerciseList)
+    public static List<BodyWeightItem> readBodyWeight()
     {
-        workouts = new HashMap<>();
-        exercises = new HashMap<>();
-        exercisesList = exerciseList;
-        for(Exercise exercise : exerciseList)
-        {
-            String name = exercise.name;
-            Date date = exercise.date;
-            if (!workouts.containsKey(date))
-                workouts.put(date, new ArrayList<Exercise>());
-            if (!exercises.containsKey(name))
-                exercises.put(name, new ArrayList<Exercise>());
-            workouts.get(date).add(exercise);
-            exercises.get(name).add(exercise);
+        return bodyWeightItems;
+    }
+
+    public static List<Date> getDates()
+    {
+        Set<Date> dates = new HashSet<>();
+        List<Exercise> exercises = read();
+        for(Exercise e : exercises)
+            dates.add(e.date);
+        return new ArrayList<>(dates);
+    }
+
+    public static List<String> getNames()
+    {
+        Set<String> names = new HashSet<>();
+        List<Exercise> exercises = read();
+        for(Exercise e : exercises)
+            names.add(e.name);
+        return new ArrayList<>(names);
+    }
+
+    public static void addBodyWeight(List<BodyWeightItem> bodyWeightItems)
+    {
+        for(BodyWeightItem bodyWeightItem : bodyWeightItems) {
+            bodyWeightItems.add(bodyWeightItem);
+            appSqlDBHelper.insertWeight(bodyWeightItem);
         }
-        DataManager.workouts = workouts;
-        DataManager.exercises = exercises;
     }
 
-    static public List<Exercise> readAll()
+    public static void add(BodyWeightItem bodyWeightItem)
     {
-        return exercisesList;
+        bodyWeightItems.add(bodyWeightItem);
+        appSqlDBHelper.insertWeight(bodyWeightItem);
+    }
+
+    public static void add(BodyWeightItem bodyWeightItem, int position)
+    {
+        bodyWeightItems.add(position, bodyWeightItem);
+        appSqlDBHelper.insertWeight(bodyWeightItem);
+    }
+
+    public static List<Exercise> read()
+    {
+        List<Exercise> exercises = appSqlDBHelper.readAll();
+        return exercises;
+    }
+
+    public static void add(List<Exercise> exercises)
+    {
+        for(Exercise e : exercises)
+            appSqlDBHelper.insert(e);
+    }
+
+    public static void add(Exercise exercise)
+    {
+        appSqlDBHelper.insert(exercise);
+    }
+
+    public static List<Exercise> read(Date date)
+    {
+        List<Exercise> exercises = appSqlDBHelper.readAll(date);
+        return exercises;
+    }
+
+    public static List<Exercise> read(String name)
+    {
+        List<Exercise> exercises = appSqlDBHelper.readAll(name);
+        return exercises;
     }
 
     static public void addNewExercise(String exerciseName)
     {
-        exercises.put(exerciseName, new ArrayList<Exercise>());
+
     }
 
     static public void addNewWorkout(Date date)
     {
-        workouts.put(date, new ArrayList<Exercise>());
+
     }
 
     public static void delete(Exercise e)
@@ -77,7 +121,6 @@ public class DataManager {
     public static void delete(BodyWeightItem bodyWeightItem)
     {
         appSqlDBHelper.deleteBodyWeight(bodyWeightItem);
-        bodyWeightItems = appSqlDBHelper.readBodyWeight();
     }
 
     public static void updateExercise(Exercise e)
