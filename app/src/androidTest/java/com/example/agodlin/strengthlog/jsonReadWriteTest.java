@@ -12,7 +12,7 @@ import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.db.DummyData;
 import com.example.agodlin.strengthlog.db.sql.AppSqlDBHelper;
-import com.example.agodlin.strengthlog.ui.weight.dummy.BodyWeightContent;
+import com.example.agodlin.strengthlog.ui.weight.BodyWeightItem;
 import com.example.agodlin.strengthlog.utils.FileIO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,7 +44,7 @@ public class jsonReadWriteTest {
         }
 
         Date date = new Date(1,1,2018);
-        BodyWeightContent.BodyWeightItem item = new BodyWeightContent.BodyWeightItem(date, "test1", "test2");
+        BodyWeightItem item = new BodyWeightItem(date, 1, "");
         Gson gson = new Gson();
         String jsonString = gson.toJson(item);
 
@@ -68,10 +68,9 @@ public class jsonReadWriteTest {
                 != PackageManager.PERMISSION_GRANTED) {
         }
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
-        appSqlDBHelper.reset();
         DummyData.init(context);
         DataManager.init(context);
-        List<Exercise> exercises = DataManager.readAll();
+        List<Exercise> exercises = DataManager.read();
         Gson gson = new Gson();
         String jsonString = gson.toJson(exercises);
 

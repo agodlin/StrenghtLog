@@ -53,15 +53,6 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void reset()
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(ExerciseContract.SQL_DELETE_ENTRIES);
-        db.execSQL(ExerciseContract.SQL_CREATE_ENTRIES);
-        db.execSQL(BodyWeightContract.SQL_DELETE_ENTRIES);
-        db.execSQL(BodyWeightContract.SQL_CREATE_ENTRIES);
-    }
-
     public void insert(Exercise exercise)
     {
         // Gets the data repository in writePrivate mode
@@ -72,7 +63,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         Calendar calendar = Calendar.getInstance();
         calendar.set(exercise.date.year, exercise.date.month, exercise.date.day);
-        values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, calendar.getTimeInMillis());
+        values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, fix(calendar.getTimeInMillis()));
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE, exercise.name);
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_SET, gson.toJson(exercise.sets));
 
@@ -96,7 +87,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         Calendar calendar = Calendar.getInstance();
         calendar.set(bodyWeightItem.date.year, bodyWeightItem.date.month, bodyWeightItem.date.day);
-        values.put(BodyWeightContract.TableEntry.COLUMN_NAME_DATE, calendar.getTimeInMillis());
+        values.put(BodyWeightContract.TableEntry.COLUMN_NAME_DATE, fix(calendar.getTimeInMillis()));
         values.put(BodyWeightContract.TableEntry.COLUMN_NAME_WEIGHT, bodyWeightItem.weight);
         values.put(BodyWeightContract.TableEntry.COLUMN_NAME_COMMENT, bodyWeightItem.comment);
 
@@ -143,7 +134,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         List<BodyWeightItem> items = new ArrayList<>();
         while(cursor.moveToNext()) {
             int _id = cursor.getInt(0);
-            long millis = cursor.getLong(1);
+            long millis = fixback(cursor.getLong(1));
             float weight = cursor.getFloat(2);
             String comment = cursor.getString(3);
             Calendar calendar = Calendar.getInstance();
@@ -188,7 +179,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         List<Exercise> items = new ArrayList<>();
         while(cursor.moveToNext()) {
             int _id = cursor.getInt(0);
-            long millis = cursor.getLong(1);
+            long millis = fixback(cursor.getLong(1));
             String name = cursor.getString(2);
             String setsJsonString = cursor.getString(3);
             Calendar calendar = Calendar.getInstance();
@@ -235,7 +226,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         List<Exercise> items = new ArrayList<>();
         while(cursor.moveToNext()) {
             int _id = cursor.getInt(0);
-            long millis = cursor.getLong(1);
+            long millis = fixback(cursor.getLong(1));
             String setsJsonString = cursor.getString(3);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(millis);
@@ -263,7 +254,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         calendar.set(date.year, date.month, date.day);
 // Filter results WHERE "title" = 'My Title'
         String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " = ?";
-        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()) };
+        String[] selectionArgs = { String.valueOf(fix(calendar.getTimeInMillis())) };
 
 // How you want the results sorted in the resulting Cursor
         String sortOrder =
@@ -282,7 +273,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         List<Exercise> items = new ArrayList<>();
         while(cursor.moveToNext()) {
             int _id = cursor.getInt(0);
-            long millis = cursor.getLong(1);
+            long millis = fixback(cursor.getLong(1));
             String name = cursor.getString(2);
             String setsJsonString = cursor.getString(3);
             Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
@@ -301,7 +292,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 // Specify arguments in placeholder order.
         Calendar calendar = Calendar.getInstance();
         calendar.set(e.date.year, e.date.month, e.date.day);
-        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()), e.name };
+        String[] selectionArgs = { String.valueOf(fix(calendar.getTimeInMillis())), e.name };
 // Issue SQL statement.
         int nRows = db.delete(ExerciseContract.TableEntry.TABLE_NAME, selection, selectionArgs);
         if (nRows != 1)
@@ -316,7 +307,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
 // Specify arguments in placeholder order.
         Calendar calendar = Calendar.getInstance();
         calendar.set(bodyWeightItem.date.year, bodyWeightItem.date.month, bodyWeightItem.date.day);
-        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()) };
+        String[] selectionArgs = { String.valueOf(fix(calendar.getTimeInMillis())) };
 // Issue SQL statement.
         int count = db.delete(BodyWeightContract.TableEntry.TABLE_NAME, selection, selectionArgs);
         if (count != 1)
@@ -332,13 +323,12 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         Calendar calendar = Calendar.getInstance();
         Gson gson = new Gson();
         calendar.set(exercise.date.year, exercise.date.month, exercise.date.day);
-        values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, calendar.getTimeInMillis());
-        values.put(ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE, exercise.name);
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_SET, gson.toJson(exercise.sets));
 
 // Which row to update, based on the title
-        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " = ? AND " + ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE + " = ?";
-        String[] selectionArgs = { String.valueOf(calendar.getTimeInMillis()), exercise.name };
+        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " = ? AND " + ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE + " = ? ";
+        String[] selectionArgs = { String.valueOf(fix(calendar.getTimeInMillis())), exercise.name};
+
         int count = db.update(
                 ExerciseContract.TableEntry.TABLE_NAME,
                 values,
@@ -346,5 +336,15 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
                 selectionArgs);
         if (count != 1)
             Log.i("SQL", "Error update expected single row but was: " + count);
+    }
+
+    private long fix(long timeMillis)
+    {
+        return (timeMillis/(1000*60*60*24));
+    }
+
+    private long fixback(long days)
+    {
+        return (days*(1000*60*60*24));
     }
 }

@@ -24,7 +24,8 @@ public class DataManager {
     private  static AppSqlDBHelper appSqlDBHelper;
 
     private static List<BodyWeightItem> bodyWeightItems;
-
+    static Set<Date> tmpDates = new HashSet<>();
+    static Set<String> tmpNames = new HashSet<>();
     public static void init(Context context)
     {
         appSqlDBHelper = new AppSqlDBHelper(context);
@@ -42,6 +43,7 @@ public class DataManager {
         List<Exercise> exercises = read();
         for(Exercise e : exercises)
             dates.add(e.date);
+        dates.addAll(tmpDates);
         return new ArrayList<>(dates);
     }
 
@@ -51,6 +53,7 @@ public class DataManager {
         List<Exercise> exercises = read();
         for(Exercise e : exercises)
             names.add(e.name);
+        names.addAll(tmpNames);
         return new ArrayList<>(names);
     }
 
@@ -105,12 +108,12 @@ public class DataManager {
 
     static public void addNewExercise(String exerciseName)
     {
-
+        tmpNames.add(exerciseName);
     }
 
     static public void addNewWorkout(Date date)
     {
-
+        tmpDates.add(date);
     }
 
     public static void delete(Exercise e)

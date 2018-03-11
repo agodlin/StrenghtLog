@@ -36,12 +36,9 @@ public class sqlInstrumentedTest {
                 != PackageManager.PERMISSION_GRANTED) {
         }
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
-        appSqlDBHelper.reset();
         DummyData.init(context);
         DataManager.init(context);
         assertEquals(appSqlDBHelper.readAll().size(), 80);
-        assertEquals(DataManager.workouts.size(), 16);
-        assertEquals(DataManager.exercises.size(), 10);
 
         Date date = new Date(21,12,2017);
         Exercise exercise = DummyData.exercise("press", date, DummyData.sets(new int[]{5,5,5,5,5}, 60));
@@ -56,4 +53,26 @@ public class sqlInstrumentedTest {
 
         assertEquals(exerciseList.size(), 82);
     }
+    @Test
+    public void testCalendar() throws Exception {
+        Context context = InstrumentationRegistry.getTargetContext();
+
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+        }
+        AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
+        Date date = new Date(11,2,2018);
+        Exercise exercise = DummyData.exercise("press", date, DummyData.sets(new int[]{5,5,5,5,5}, 60));
+        appSqlDBHelper.insert(exercise);
+        assertEquals(appSqlDBHelper.readAll(date).size(), 1);
+        assertEquals(appSqlDBHelper.readAll(new Date(12,2,2018)).size(), 0);
+        assertEquals(appSqlDBHelper.readAll(new Date(13,2,2018)).size(), 0);
+        Exercise exercise2 = DummyData.exercise("press", new Date(13,2,2018), DummyData.sets(new int[]{5,5,5,5,5}, 60));
+        appSqlDBHelper.insert(exercise2);
+        assertEquals(appSqlDBHelper.readAll(date).size(), 1);
+        assertEquals(appSqlDBHelper.readAll(new Date(12,2,2018)).size(), 0);
+        assertEquals(appSqlDBHelper.readAll(new Date(13,2,2018)).size(), 1);
+    }
+
 }

@@ -148,6 +148,7 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                             Log.i(TAG, "weight " + weightsValue);
                             exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), Double.parseDouble(weightsValue)));
                             holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
+                            DataManager.updateExercise(exerciseDay);
                             dialog.cancel();
                         }
 

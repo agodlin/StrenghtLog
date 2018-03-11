@@ -138,6 +138,7 @@ public class ExerciseFragment extends Fragment implements RecyclerItemTouchHelpe
                                     position = position * -1 - 1;
                                     mValues.add(position, exercise);
                                     recyclerView.getAdapter().notifyItemInserted(position);
+                                    DataManager.add(exercise);
                                 }
                                 Log.d(TAG, "Text set To : " + exerciseName);
                                 dialog.cancel();

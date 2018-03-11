@@ -113,6 +113,7 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
 
                                 Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
                                 mValues.add(exercise);
+                                DataManager.add(exercise);
                                 recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
 
                             }

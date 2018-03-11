@@ -59,7 +59,6 @@ public class DummyData {
     static void saveToSQL(Context context)
     {
         AppSqlDBHelper appSqlDBHelper = new AppSqlDBHelper(context);
-        appSqlDBHelper.reset();
         for(Date key : workouts.keySet()) {
             for (Exercise exercise : workouts.get(key))
                 appSqlDBHelper.insert(exercise);
