@@ -150,7 +150,7 @@ public class WorkoutsFragment extends Fragment implements RecyclerItemTouchHelpe
 
                 if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                     if (mOnLoadMoreListener != null) {
-                        mOnLoadMoreListener.onLoadMore();
+                        //mOnLoadMoreListener.onLoadMore();
                     }
                     isLoading = true;
                 }

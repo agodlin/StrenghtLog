@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -139,15 +140,22 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                 View view = inflater.inflate(R.layout.add_set_layout, null);
                 final EditText reps = (EditText)view.findViewById(R.id.reps);
                 final EditText weights = (EditText)view.findViewById(R.id.weight);
+                final CheckBox checked = (CheckBox) view.findViewById(R.id.checkbox_lbs);
+                final EditText sets = (EditText)view.findViewById(R.id.set);
                 new AlertDialog.Builder(holder.context).setTitle("Add Set").setView(view)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             String repsValue = reps.getText().toString();
                             String weightsValue = weights.getText().toString();
+                            String setsValue = sets.getText().toString();
+                            boolean useLbs= checked.isChecked();
                             Log.i(TAG, "reps " + repsValue);
                             Log.i(TAG, "weight " + weightsValue);
-                            exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), Double.parseDouble(weightsValue)));
-                            holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
+                            for(int i = 0 ; i < Integer.parseInt(setsValue); i++) {
+                                double weigthKgs = useLbs ? Double.parseDouble(weightsValue)*0.453592 : Double.parseDouble(weightsValue);
+                                exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), weigthKgs));
+                                holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
+                            }
                             DataManager.updateExercise(exerciseDay);
                             dialog.cancel();
                         }

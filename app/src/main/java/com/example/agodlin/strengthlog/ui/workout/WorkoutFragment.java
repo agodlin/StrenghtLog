@@ -106,7 +106,7 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
                             public void onClick(DialogInterface dialog, int id) {
                                 String name = input.getText().toString();
                                 //TODO should be able to add a new exercise name
-                                if (name.isEmpty() || !DataManager.getNames().contains(name))
+                                if (name.isEmpty())
                                 {
                                     return;
                                 }
