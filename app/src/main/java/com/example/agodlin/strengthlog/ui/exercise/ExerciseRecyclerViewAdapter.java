@@ -1,5 +1,6 @@
 package com.example.agodlin.strengthlog.ui.exercise;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,13 +40,16 @@ import java.util.List;
  */
 public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "ExerciseAdapter";
-    protected List<Exercise> mItems;
+    private List<Exercise> mItems;
+
     int viewType;
     final RelativeLayout relativeLayout;
-    public ExerciseRecyclerViewAdapter(List<Exercise> exercises, int viewType, RelativeLayout relativeLayout) {
+    Activity activity;
+    public ExerciseRecyclerViewAdapter(Activity activity, List<Exercise> exercises, int viewType, RelativeLayout relativeLayout) {
         this.viewType = viewType;
         mItems = exercises;
         this.relativeLayout = relativeLayout;
+        this.activity = activity;
     }
 
     @Override

@@ -74,7 +74,6 @@ public class ExercisesFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.setAdapter(new ExerciseNameRecyclerViewAdapter(items, mListener));
         mRecyclerView.setHasFixedSize(true);
-
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_exercise_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
