@@ -13,10 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.agodlin.strengthlog.R;
 import com.example.agodlin.strengthlog.common.Date;
@@ -140,7 +143,16 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                 View view = inflater.inflate(R.layout.add_set_layout, null);
                 final EditText reps = (EditText)view.findViewById(R.id.reps);
                 final EditText weights = (EditText)view.findViewById(R.id.weight);
-                final CheckBox checked = (CheckBox) view.findViewById(R.id.checkbox_lbs);
+                final ToggleButton sw = (ToggleButton) view.findViewById(R.id.switch1);
+                sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            sw.setTextOn("lbs");
+                        } else {
+                            sw.setTextOff("kg");
+                        }
+                    }
+                });
                 final EditText sets = (EditText)view.findViewById(R.id.set);
                 new AlertDialog.Builder(holder.context).setTitle("Add Set").setView(view)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -148,11 +160,15 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                             String repsValue = reps.getText().toString();
                             String weightsValue = weights.getText().toString();
                             String setsValue = sets.getText().toString();
-                            boolean useLbs= checked.isChecked();
+                            if (repsValue.isEmpty() || weightsValue.isEmpty() || setsValue.isEmpty()) {
+                                dialog.cancel();
+                                return;
+                            }
+                            boolean useLBS = sw.isChecked();
                             Log.i(TAG, "reps " + repsValue);
                             Log.i(TAG, "weight " + weightsValue);
                             for(int i = 0 ; i < Integer.parseInt(setsValue); i++) {
-                                double weigthKgs = useLbs ? Double.parseDouble(weightsValue)*0.453592 : Double.parseDouble(weightsValue);
+                                double weigthKgs = useLBS ? Double.parseDouble(weightsValue)*0.453592 : Double.parseDouble(weightsValue);
                                 exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), weigthKgs));
                                 holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
                             }

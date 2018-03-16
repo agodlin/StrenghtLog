@@ -1,5 +1,7 @@
 package com.example.agodlin.strengthlog.common;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by agodlin on 1/13/2018.
  */
@@ -15,8 +17,9 @@ public class Set {
 
     @Override
     public String toString() {
+        DecimalFormat df = new DecimalFormat("#.##");
         return "reps=" + reps +
-                ", weight=" + weight;
+                ", weight=" + df.format(weight);
     }
 
     @Override
