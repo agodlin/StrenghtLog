@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BodyWeightRecyclerViewAdapter extends RecyclerView.Adapter<BodyWeightRecyclerViewAdapter.ViewHolder> {
     private OnListFragmentInteractionListener mListener;
-    protected List<BodyWeightItem> mItems;
+    private List<BodyWeightItem> mItems;
 
     public BodyWeightRecyclerViewAdapter(List<BodyWeightItem> items, OnListFragmentInteractionListener mListener) {
         mItems = items;

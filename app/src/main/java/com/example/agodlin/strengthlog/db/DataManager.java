@@ -23,18 +23,16 @@ public class DataManager {
 
     private  static AppSqlDBHelper appSqlDBHelper;
 
-    private static List<BodyWeightItem> bodyWeightItems;
     static Set<Date> tmpDates = new HashSet<>();
     static Set<String> tmpNames = new HashSet<>();
     public static void init(Context context)
     {
         appSqlDBHelper = new AppSqlDBHelper(context);
-        bodyWeightItems = appSqlDBHelper.readBodyWeight();
     }
 
     public static List<BodyWeightItem> readBodyWeight()
     {
-        return bodyWeightItems;
+        return appSqlDBHelper.readBodyWeight();
     }
 
     public static List<Date> getDates()
@@ -60,20 +58,17 @@ public class DataManager {
     public static void addBodyWeight(List<BodyWeightItem> bodyWeightItems)
     {
         for(BodyWeightItem bodyWeightItem : bodyWeightItems) {
-            bodyWeightItems.add(bodyWeightItem);
             appSqlDBHelper.insertWeight(bodyWeightItem);
         }
     }
 
     public static void add(BodyWeightItem bodyWeightItem)
     {
-        bodyWeightItems.add(bodyWeightItem);
         appSqlDBHelper.insertWeight(bodyWeightItem);
     }
 
     public static void add(BodyWeightItem bodyWeightItem, int position)
     {
-        bodyWeightItems.add(position, bodyWeightItem);
         appSqlDBHelper.insertWeight(bodyWeightItem);
     }
 

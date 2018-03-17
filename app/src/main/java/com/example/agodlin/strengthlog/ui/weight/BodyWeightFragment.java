@@ -52,7 +52,7 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
     RecyclerView mRecyclerView;
     BodyWeightRecyclerViewAdapter mAdapter;
     RelativeLayout frameLayout;
-
+    List<BodyWeightItem> mItems;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -90,7 +90,8 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mAdapter = new BodyWeightRecyclerViewAdapter(DataManager.readBodyWeight(), mListener);
+        mItems = DataManager.readBodyWeight();
+        mAdapter = new BodyWeightRecyclerViewAdapter(mItems, mListener);
         mRecyclerView.setAdapter(mAdapter);
 
         frameLayout = (RelativeLayout)view.findViewById(R.id.bodyweight_frag);
@@ -148,7 +149,8 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
                                                 if (position < 0) {
                                                     Log.d(TAG, "BodyWeightItem insert position : " + position + " value : " + bodyWeightItem.toString());
                                                     position = position * -1 - 1;
-                                                    DataManager.add(bodyWeightItem, position);
+                                                    mItems.add(position, bodyWeightItem);
+                                                    DataManager.add(bodyWeightItem);
                                                     mRecyclerView.getAdapter().notifyItemInserted(position);
                                                 }
                                                 else {
@@ -229,10 +231,10 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof BodyWeightRecyclerViewAdapter.ViewHolder) {
             // get the removed item name to display it in snack bar
-            String name = mAdapter.mItems.get(viewHolder.getAdapterPosition()).date.toString();
+            String name = mItems.get(viewHolder.getAdapterPosition()).date.toString();
 
             // backup of removed item for undo purpose
-            final BodyWeightItem deletedItem = mAdapter.mItems.get(viewHolder.getAdapterPosition());
+            final BodyWeightItem deletedItem = mItems.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view
