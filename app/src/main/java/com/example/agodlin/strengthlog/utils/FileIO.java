@@ -56,6 +56,16 @@ public class FileIO {
         }
     }
 
+    static public void writeStorage(byte[] bytes, String filename)
+    {
+        writeStorage(bytes, filename, null);
+    }
+
+    static public byte[] readStorage(String filename)
+    {
+        return readStorage(filename, null);
+    }
+
     static public byte[] readStorage(String filename, String subfolder)
     {
         File dir = getAlbumStorageDir(subfolder);

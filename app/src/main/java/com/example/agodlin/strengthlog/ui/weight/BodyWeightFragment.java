@@ -191,11 +191,11 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
                 String jsonString = gson.toJson(DataManager.readBodyWeight());
                 Log.i(TAG, "BodyWeightContent json value : " + jsonString);
                 String filename = "bodyweight.json";
-                FileIO.writePrivate(jsonString.getBytes(), getContext(), filename);
+                FileIO.writeStorage(jsonString.getBytes(), filename);
             }
             case R.id.action_import: {
                 String filename = "bodyweight.json";
-                String jsonString = new String(FileIO.readPrivate(getContext(), filename));
+                String jsonString = new String(FileIO.readStorage(filename));
                 Type listType = new TypeToken<ArrayList<BodyWeightItem>>(){}.getType();
                 DataManager.addBodyWeight((List<BodyWeightItem>)new Gson().fromJson(jsonString, listType));
             }

@@ -94,14 +94,14 @@ public class MainActivity extends AppCompatActivity
             Gson gson = new Gson();
             String jsonString = gson.toJson(exercises);
             String filename = "exercises.json";
-            FileIO.writePrivate(jsonString.getBytes(), getApplicationContext(), filename);
+            FileIO.writeStorage(jsonString.getBytes(), filename);
             return true;
         }
         else if(id == R.id.load_exercises)
         {
             Log.d(TAG, "Loading exercises from file");
             String filename = "exercises.json";
-            String jsonString = new String(FileIO.readPrivate(getApplicationContext(), filename));
+            String jsonString = new String(FileIO.readStorage(filename));
             Type listType = new TypeToken<ArrayList<Exercise>>(){}.getType();
             List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
             DataManager.add(exercises);
