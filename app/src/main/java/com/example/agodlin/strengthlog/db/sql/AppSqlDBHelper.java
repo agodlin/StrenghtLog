@@ -53,6 +53,13 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    public void clear(SQLiteDatabase db)
+    {
+        db.execSQL(ExerciseContract.SQL_DELETE_ENTRIES);
+        db.execSQL(BodyWeightContract.SQL_DELETE_ENTRIES);
+        onCreate(db);
+    }
+
     public void insert(Exercise exercise)
     {
         // Gets the data repository in writePrivate mode

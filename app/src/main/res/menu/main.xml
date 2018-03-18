@@ -16,4 +16,9 @@
         android:orderInCategory="100"
         android:title="load"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/clear_db"
+        android:orderInCategory="100"
+        android:title="ClearDB"
+        app:showAsAction="never" />
 </menu>

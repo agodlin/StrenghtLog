@@ -20,6 +20,7 @@ import com.example.agodlin.strengthlog.common.Set;
 import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.db.DummyData;
 import com.example.agodlin.strengthlog.ui.exercises.ExercisesActivity;
+import com.example.agodlin.strengthlog.ui.weight.BodyWeightItem;
 import com.example.agodlin.strengthlog.ui.weight.WeightActivity;
 import com.example.agodlin.strengthlog.ui.workout.WorkoutActivity;
 import com.example.agodlin.strengthlog.utils.FileIO;
@@ -90,21 +91,45 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.export_exercises) {
             Log.d(TAG, "Saving exercises to file");
-            List<Exercise> exercises = DataManager.read();
-            Gson gson = new Gson();
-            String jsonString = gson.toJson(exercises);
-            String filename = "exercises.json";
-            FileIO.writeStorage(jsonString.getBytes(), filename);
+            {
+                List<Exercise> exercises = DataManager.read();
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(exercises);
+                String filename = "exercises.json";
+                FileIO.writeStorage(jsonString.getBytes(), filename);
+            }
+            {
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(DataManager.readBodyWeight());
+                Log.i(TAG, "BodyWeightContent json value : " + jsonString);
+                String filename = "bodyweight.json";
+                FileIO.writeStorage(jsonString.getBytes(), filename);
+            }
             return true;
         }
         else if(id == R.id.load_exercises)
         {
             Log.d(TAG, "Loading exercises from file");
-            String filename = "exercises.json";
-            String jsonString = new String(FileIO.readStorage(filename));
-            Type listType = new TypeToken<ArrayList<Exercise>>(){}.getType();
-            List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
-            DataManager.add(exercises);
+            {
+                String filename = "exercises.json";
+                String jsonString = new String(FileIO.readStorage(filename));
+                Type listType = new TypeToken<ArrayList<Exercise>>() {
+                }.getType();
+                List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
+                DataManager.add(exercises);
+            }
+            {
+                String filename = "bodyweight.json";
+                String jsonString = new String(FileIO.readStorage(filename));
+                Type listType = new TypeToken<ArrayList<BodyWeightItem>>() {
+                }.getType();
+                DataManager.addBodyWeight((List<BodyWeightItem>) new Gson().fromJson(jsonString, listType));
+            }
+            return true;
+        }
+        else if(id == R.id.clear_db)
+        {
+            DataManager.clearAll();
             return true;
         }
 

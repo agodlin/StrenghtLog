@@ -35,6 +35,11 @@ public class DataManager {
         return appSqlDBHelper.readBodyWeight();
     }
 
+    public static void clearAll()
+    {
+        appSqlDBHelper.clear(appSqlDBHelper.getWritableDatabase());
+    }
+
     public static List<Date> getDates()
     {
         Set<Date> dates = new HashSet<>();
@@ -57,6 +62,7 @@ public class DataManager {
 
     public static void addBodyWeight(List<BodyWeightItem> bodyWeightItems)
     {
+        if (bodyWeightItems == null)return;
         for(BodyWeightItem bodyWeightItem : bodyWeightItems) {
             appSqlDBHelper.insertWeight(bodyWeightItem);
         }
@@ -80,6 +86,7 @@ public class DataManager {
 
     public static void add(List<Exercise> exercises)
     {
+        if (exercises == null)return;
         for(Exercise e : exercises)
             appSqlDBHelper.insert(e);
     }

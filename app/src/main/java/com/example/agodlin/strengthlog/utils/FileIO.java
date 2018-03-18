@@ -78,7 +78,7 @@ public class FileIO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return new byte[0];
     }
 
     static public File getAlbumStorageDir(String subfolder) {

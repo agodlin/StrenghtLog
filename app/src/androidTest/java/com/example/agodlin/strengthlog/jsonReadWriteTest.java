@@ -78,4 +78,13 @@ public class jsonReadWriteTest {
         List<Exercise> list2 = new Gson().fromJson(jsonString, listType);
         assertArrayEquals(exercises.toArray(), list2.toArray());
     }
+    @Test
+    public void simpleTest() throws Exception {
+        String filename = "exercises.json";
+        String jsonString = new String(new byte[0]);
+        Type listType = new TypeToken<ArrayList<Exercise>>() {
+        }.getType();
+        List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
+        DataManager.add(exercises);
+    }
 }
