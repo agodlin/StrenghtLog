@@ -46,6 +46,7 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
     private OnListFragmentInteractionListener mListener;
     Date mDate;
     List<Exercise> mValues;
+    List<String> mNames;
     ExerciseRecyclerViewAdapter adapter;
     RelativeLayout relativeLayout;
     /**
@@ -75,6 +76,9 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
         }
         getActivity().setTitle(mDate.toString());
         mValues = DataManager.read(mDate);
+        mNames = new ArrayList<>();
+        for(Exercise e : mValues)
+            mNames.add(e.name);
     }
 
     @Override
@@ -102,15 +106,19 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Select Exercise");
-                final String[] exercisesArr = new String[DataManager.getNames().size()];
-                DataManager.getNames().toArray(exercisesArr);
+                List<String> subset = DataManager.getNames();
+                subset.removeAll(mNames);
+                final String[] exercisesArr = new String[subset.size()];
+                subset.toArray(exercisesArr);
                 builder.setItems(exercisesArr, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.i(TAG, "Click on " + exercisesArr[which]);
                         String name = exercisesArr[which];
+                        if (mNames.contains(name)) return;
                         Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
                         mValues.add(exercise);
+                        mNames.add(name);
                         DataManager.add(exercise);
                         recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
                     }
@@ -163,9 +171,11 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
                     // undo is selected, restore the deleted item
                     adapter.restoreItem(deletedItem, deletedIndex);
                     DataManager.add(deletedItem);
+                    mNames.add(deletedItem.name);
 
                 }
             });
+            mNames.remove(deletedItem.name);
             DataManager.delete(deletedItem);
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();

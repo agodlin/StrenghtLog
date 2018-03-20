@@ -109,13 +109,14 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id == R.id.load_exercises)
         {
-            Log.d(TAG, "Loading exercises from file");
             {
                 String filename = "exercises.json";
                 String jsonString = new String(FileIO.readStorage(filename));
                 Type listType = new TypeToken<ArrayList<Exercise>>() {
                 }.getType();
                 List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
+                int size = exercises == null ? 0 : exercises.size();
+                Log.d(TAG, "Loading exercises size of " + size);
                 DataManager.add(exercises);
             }
             {
@@ -123,7 +124,10 @@ public class MainActivity extends AppCompatActivity
                 String jsonString = new String(FileIO.readStorage(filename));
                 Type listType = new TypeToken<ArrayList<BodyWeightItem>>() {
                 }.getType();
-                DataManager.addBodyWeight((List<BodyWeightItem>) new Gson().fromJson(jsonString, listType));
+                List<BodyWeightItem> bodyWeightItems = new Gson().fromJson(jsonString, listType);
+                int size = bodyWeightItems == null ? 0 : bodyWeightItems.size();
+                Log.d(TAG, "Loading bodyweight size of " + size);
+                DataManager.addBodyWeight(bodyWeightItems);
             }
             return true;
         }
