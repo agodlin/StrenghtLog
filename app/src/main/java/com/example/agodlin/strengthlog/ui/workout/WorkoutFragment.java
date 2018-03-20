@@ -12,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import java.util.List;
  * interface.
  */
 public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+    String TAG = "WorkoutFragment";
     public static final String ARG_WORKOUT_DATE = "workout-date";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -99,31 +101,22 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                final EditText input = new EditText(getActivity());
-                builder.setView(input);
-                builder.setTitle(R.string.insert_exercise_name)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                String name = input.getText().toString();
-                                //TODO should be able to add a new exercise name
-                                if (name.isEmpty())
-                                {
-                                    return;
-                                }
-
-                                Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
-                                mValues.add(exercise);
-                                DataManager.add(exercise);
-                                recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
-
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                builder.show();
+                builder.setTitle("Select Exercise");
+                final String[] exercisesArr = new String[DataManager.getNames().size()];
+                DataManager.getNames().toArray(exercisesArr);
+                builder.setItems(exercisesArr, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i(TAG, "Click on " + exercisesArr[which]);
+                        String name = exercisesArr[which];
+                        Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
+                        mValues.add(exercise);
+                        DataManager.add(exercise);
+                        recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
         return view;
