@@ -1,9 +1,11 @@
 package com.example.agodlin.strengthlog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -89,51 +91,85 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-        else if (id == R.id.export_exercises) {
-            Log.d(TAG, "Saving exercises to file");
+        else if (id == R.id.save_exercises) {
             {
-                List<Exercise> exercises = DataManager.read();
-                Gson gson = new Gson();
-                String jsonString = gson.toJson(exercises);
-                String filename = "exercises.json";
-                FileIO.writeStorage(jsonString.getBytes(), filename);
-            }
-            {
-                Gson gson = new Gson();
-                String jsonString = gson.toJson(DataManager.readBodyWeight());
-                Log.i(TAG, "BodyWeightContent json value : " + jsonString);
-                String filename = "bodyweight.json";
-                FileIO.writeStorage(jsonString.getBytes(), filename);
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Save Data to Disk ?").setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        {
+                            List<Exercise> exercises = DataManager.read();
+                            int size = exercises == null ? 0 : exercises.size();
+                            Log.d(TAG, "Save exercises size of " + size);
+                            Gson gson = new Gson();
+                            String jsonString = gson.toJson(exercises);
+                            String filename = "exercises.json";
+                            FileIO.writeStorage(jsonString.getBytes(), filename);
+                        }
+                        {
+                            Gson gson = new Gson();
+                            List<BodyWeightItem> bodyWeightItems = DataManager.readBodyWeight();
+                            String jsonString = gson.toJson(bodyWeightItems);
+                            int size = bodyWeightItems == null ? 0 : bodyWeightItems.size();
+                            Log.d(TAG, "Save bodyweight size of " + size);
+                            String filename = "bodyweight.json";
+                            FileIO.writeStorage(jsonString.getBytes(), filename);
+                        }
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
             }
             return true;
         }
         else if(id == R.id.load_exercises)
         {
-            {
-                String filename = "exercises.json";
-                String jsonString = new String(FileIO.readStorage(filename));
-                Type listType = new TypeToken<ArrayList<Exercise>>() {
-                }.getType();
-                List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
-                int size = exercises == null ? 0 : exercises.size();
-                Log.d(TAG, "Loading exercises size of " + size);
-                DataManager.add(exercises);
-            }
-            {
-                String filename = "bodyweight.json";
-                String jsonString = new String(FileIO.readStorage(filename));
-                Type listType = new TypeToken<ArrayList<BodyWeightItem>>() {
-                }.getType();
-                List<BodyWeightItem> bodyWeightItems = new Gson().fromJson(jsonString, listType);
-                int size = bodyWeightItems == null ? 0 : bodyWeightItems.size();
-                Log.d(TAG, "Loading bodyweight size of " + size);
-                DataManager.addBodyWeight(bodyWeightItems);
-            }
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle("Load Data from Disk ?").setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    {
+                        String filename = "exercises.json";
+                        String jsonString = new String(FileIO.readStorage(filename));
+                        Type listType = new TypeToken<ArrayList<Exercise>>() {
+                        }.getType();
+                        List<Exercise> exercises = new Gson().fromJson(jsonString, listType);
+                        int size = exercises == null ? 0 : exercises.size();
+                        Log.d(TAG, "Loading exercises size of " + size);
+                        DataManager.add(exercises);
+                    }
+                    {
+                        String filename = "bodyweight.json";
+                        String jsonString = new String(FileIO.readStorage(filename));
+                        Type listType = new TypeToken<ArrayList<BodyWeightItem>>() {
+                        }.getType();
+                        List<BodyWeightItem> bodyWeightItems = new Gson().fromJson(jsonString, listType);
+                        int size = bodyWeightItems == null ? 0 : bodyWeightItems.size();
+                        Log.d(TAG, "Loading bodyweight size of " + size);
+                        DataManager.addBodyWeight(bodyWeightItems);
+                    }
+                }
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            }).show();
             return true;
         }
         else if(id == R.id.clear_db)
         {
-            DataManager.clearAll();
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle("Clear All Data ?").setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    DataManager.clearAll();
+                }
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+
             return true;
         }
 

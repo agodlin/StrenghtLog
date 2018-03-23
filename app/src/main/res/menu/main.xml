@@ -7,14 +7,14 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/export_exercises"
+        android:id="@+id/save_exercises"
         android:orderInCategory="100"
-        android:title="export"
+        android:title="Save to Disk"
         app:showAsAction="never" />
     <item
         android:id="@+id/load_exercises"
         android:orderInCategory="100"
-        android:title="load"
+        android:title="Load From Disk"
         app:showAsAction="never" />
     <item
         android:id="@+id/clear_db"
