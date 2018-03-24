@@ -345,4 +345,48 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         if (count != 1)
             Log.i("SQL", "Error update expected single row but was: " + count);
     }
+
+    public List<BodyWeightItem> readBodyWeightAfterDate(long miliseconds)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+// Define a projection that specifies which columns from the database
+// you will actually use after this query.
+        String[] projection = {
+                BaseColumns._ID,
+                BodyWeightContract.TableEntry.COLUMN_NAME_DATE,
+                BodyWeightContract.TableEntry.COLUMN_NAME_WEIGHT,
+                BodyWeightContract.TableEntry.COLUMN_NAME_COMMENT
+        };
+// Filter results WHERE "title" = 'My Title'
+        String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " > ?";
+        String[] selectionArgs = { String.valueOf(DateHelper.roundTimeToDay(miliseconds)) };
+
+// How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                BodyWeightContract.TableEntry.COLUMN_NAME_DATE + " DESC";
+
+        Cursor cursor = db.query(
+                BodyWeightContract.TableEntry.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        Gson gson = new Gson();
+        List<BodyWeightItem> items = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            int _id = cursor.getInt(0);
+            long millis = DateHelper.convertDaysToMilis(cursor.getLong(1));
+            float weight = cursor.getFloat(2);
+            String comment = cursor.getString(3);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(millis);
+            items.add(new BodyWeightItem(new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), weight, comment));
+        }
+        cursor.close();
+        return items;
+    }
 }

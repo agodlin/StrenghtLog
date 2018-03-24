@@ -12,6 +12,7 @@ import com.example.agodlin.strengthlog.common.Exercise;
 import com.example.agodlin.strengthlog.db.DataManager;
 import com.example.agodlin.strengthlog.db.DummyData;
 import com.example.agodlin.strengthlog.db.sql.AppSqlDBHelper;
+import com.example.agodlin.strengthlog.utils.DateHelper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,6 +74,24 @@ public class sqlInstrumentedTest {
         assertEquals(appSqlDBHelper.readAll(date).size(), 1);
         assertEquals(appSqlDBHelper.readAll(new Date(12,2,2018)).size(), 0);
         assertEquals(appSqlDBHelper.readAll(new Date(13,2,2018)).size(), 1);
+    }
+
+    @Test
+    public void testCalendar2() throws Exception {
+        Context context = InstrumentationRegistry.getTargetContext();
+
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+        }
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DATE);
+        int m = calendar.get(Calendar.MONTH);
+        long milisToday = calendar.getTimeInMillis();
+        long milis30Days = DateHelper.subtractMonths(milisToday, 1);
+        calendar.setTimeInMillis(milis30Days);
+        assertEquals(m-1, calendar.get(Calendar.MONTH));
+        assertEquals(day, calendar.get(Calendar.DATE));
     }
 
 }
