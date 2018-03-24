@@ -145,7 +145,7 @@ public class BodyWeightFragment extends Fragment implements RecyclerItemTouchHel
                                                         return u1.date.compareTo(u2.date);
                                                     }
                                                 };
-                                                int position = Collections.binarySearch(DataManager.readBodyWeight(), bodyWeightItem, c);
+                                                int position = Collections.binarySearch(mItems, bodyWeightItem, c);
                                                 if (position < 0) {
                                                     Log.d(TAG, "BodyWeightItem insert position : " + position + " value : " + bodyWeightItem.toString());
                                                     position = position * -1 - 1;
