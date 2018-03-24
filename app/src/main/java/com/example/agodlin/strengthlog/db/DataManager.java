@@ -22,7 +22,7 @@ public class DataManager {
     //TODO add cache logic
 
     private  static AppSqlDBHelper appSqlDBHelper;
-
+    static DataCache dataCache = new DataCache();
     static Set<Date> tmpDates = new HashSet<>();
     static Set<String> tmpNames = new HashSet<>();
     public static void init(Context context)
@@ -32,7 +32,13 @@ public class DataManager {
 
     public static List<BodyWeightItem> readBodyWeight()
     {
-        return appSqlDBHelper.readBodyWeight();
+        List<BodyWeightItem> bodyWeightItemList = dataCache.getBodyWeightItems();
+        if (bodyWeightItemList.isEmpty())
+        {
+            bodyWeightItemList = appSqlDBHelper.readBodyWeight();
+            dataCache.setBodyWeightItems(bodyWeightItemList);
+        }
+        return bodyWeightItemList;
     }
 
     public static void clearAll()
@@ -132,4 +138,5 @@ public class DataManager {
     {
         appSqlDBHelper.update(e);
     }
+
 }
