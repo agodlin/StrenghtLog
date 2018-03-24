@@ -31,6 +31,7 @@ import com.example.agodlin.strengthlog.ui.common.RecyclerItemTouchHelper;
 import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -148,6 +149,13 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                 final EditText reps = (EditText)view.findViewById(R.id.reps);
                 final EditText weights = (EditText)view.findViewById(R.id.weight);
                 final ToggleButton sw = (ToggleButton) view.findViewById(R.id.switch1);
+                final EditText sets = (EditText)view.findViewById(R.id.set);
+                sets.setText("1");
+                if (exerciseDay.sets.size() > 0)
+                {
+                    int lastIndex = exerciseDay.sets.size() - 1;
+                    reps.setText(String.valueOf(exerciseDay.sets.get(lastIndex).reps));
+                }
                 sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
@@ -157,7 +165,6 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                         }
                     }
                 });
-                final EditText sets = (EditText)view.findViewById(R.id.set);
                 new AlertDialog.Builder(holder.context).setTitle("Add Set").setView(view)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
