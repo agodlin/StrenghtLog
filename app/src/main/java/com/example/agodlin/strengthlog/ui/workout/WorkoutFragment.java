@@ -117,10 +117,10 @@ public class WorkoutFragment extends Fragment implements RecyclerItemTouchHelper
                         String name = exercisesArr[which];
                         if (mNames.contains(name)) return;
                         Exercise exercise = new Exercise(name, mDate, new ArrayList<Set>());
-                        mValues.add(exercise);
+                        mValues.add(0, exercise);
                         mNames.add(name);
                         DataManager.add(exercise);
-                        recyclerView.getAdapter().notifyItemInserted(mValues.size() - 1);
+                        recyclerView.getAdapter().notifyItemInserted(0);
                     }
                 });
                 AlertDialog dialog = builder.create();

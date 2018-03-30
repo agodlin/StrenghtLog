@@ -44,7 +44,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
         android:ems="10"
-        android:inputType="numberSigned"
+        android:inputType="phone"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toTopOf="parent" />
 

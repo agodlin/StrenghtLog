@@ -32,7 +32,10 @@ import com.example.agodlin.strengthlog.ui.common.SwipeViewHolder;
 import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Exercise} and makes a call to the
@@ -178,11 +181,38 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
                             boolean useLBS = sw.isChecked();
                             Log.i(TAG, "reps " + repsValue);
                             Log.i(TAG, "weight " + weightsValue);
-                            for(int i = 0 ; i < Integer.parseInt(setsValue); i++) {
-                                double weigthKgs = useLBS ? Double.parseDouble(weightsValue)*0.453592 : Double.parseDouble(weightsValue);
-                                exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), weigthKgs));
-                                holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
+                            double weigthKgs = useLBS ? Double.parseDouble(weightsValue)*0.453592 : Double.parseDouble(weightsValue);
+                            List<Integer> reps = new ArrayList<>();
+                            if (repsValue.contains("-"))
+//                                reps = Arrays.asList(repsValue.split("-")).stream()
+//                                        .map(s -> Integer.parseInt(s))
+//                                        .collect(Collectors.toList());
+                            {
+                                for(String v :repsValue.split("-"))
+                                    reps.add(Integer.parseInt(v));
                             }
+                            if (repsValue.contains(","))
+//                                reps = Arrays.asList(repsValue.split(",")).stream()
+//                                        .map(s -> Integer.parseInt(s))
+//                                        .collect(Collectors.toList());
+                            {
+                                for(String v :repsValue.split(","))
+                                    reps.add(Integer.parseInt(v));
+                            }
+                            if (!reps.isEmpty())
+                            {
+                                for(int i = 0 ; i < reps.size(); i++) {
+                                    exerciseDay.sets.add(new Set(reps.get(i), weigthKgs));
+                                    holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
+                                }
+                            }
+                            else {
+                                for(int i = 0 ; i < Integer.parseInt(setsValue); i++) {
+                                    exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), weigthKgs));
+                                    holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
+                                }
+                            }
+
                             DataManager.updateExercise(exerciseDay);
                             dialog.cancel();
                         }
