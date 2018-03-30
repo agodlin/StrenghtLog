@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/add_sets"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Add Sets" />
+
+    <TextView
+        android:id="@+id/add_comment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Add Comment" />
+
+    <TextView
+        android:id="@+id/edit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Edit" />
+</LinearLayout>

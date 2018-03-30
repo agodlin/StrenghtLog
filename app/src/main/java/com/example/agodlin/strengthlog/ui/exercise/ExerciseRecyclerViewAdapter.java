@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -146,85 +147,124 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         holder.imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "ImageButton pressed ");
-                LayoutInflater inflater = LayoutInflater.from(holder.context);
-                View view = inflater.inflate(R.layout.add_set_layout, null);
-                final EditText reps = (EditText)view.findViewById(R.id.reps);
-                final EditText weights = (EditText)view.findViewById(R.id.weight);
-                final ToggleButton sw = (ToggleButton) view.findViewById(R.id.switch1);
-                final EditText sets = (EditText)view.findViewById(R.id.set);
-                sets.setText("1");
-                if (exerciseDay.sets.size() > 0)
-                {
-                    int lastIndex = exerciseDay.sets.size() - 1;
-                    reps.setText(String.valueOf(exerciseDay.sets.get(lastIndex).reps));
+                setBottomSheetDialog(holder, exerciseDay);
+            }
+        });
+    }
+
+    void setBottomSheetDialog(final ExerciseRecyclerViewAdapter.ViewHolder holder, final Exercise exerciseDay)
+    {
+        LayoutInflater inflater = LayoutInflater.from(holder.context);
+        View view = inflater.inflate(R.layout.exercise_menu, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(holder.context);
+        dialog.setContentView(view);
+
+        TextView addSetsView = (TextView) view.findViewById(R.id.add_sets);
+        TextView addCommentView = (TextView) view.findViewById(R.id.add_comment);
+        TextView editView = (TextView) view.findViewById(R.id.edit);
+        addSetsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAddSets(holder, exerciseDay);
+                dialog.dismiss();
+            }
+        });
+        addCommentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        editView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    void setAddSets(final ExerciseRecyclerViewAdapter.ViewHolder holder, final Exercise exerciseDay)
+    {
+        Log.i(TAG, "ImageButton pressed ");
+        LayoutInflater inflater = LayoutInflater.from(holder.context);
+        View view = inflater.inflate(R.layout.add_set_layout, null);
+        final EditText reps = (EditText)view.findViewById(R.id.reps);
+        final EditText weights = (EditText)view.findViewById(R.id.weight);
+        final ToggleButton sw = (ToggleButton) view.findViewById(R.id.switch1);
+        final EditText sets = (EditText)view.findViewById(R.id.set);
+        sets.setText("1");
+        if (exerciseDay.sets.size() > 0)
+        {
+            int lastIndex = exerciseDay.sets.size() - 1;
+            reps.setText(String.valueOf(exerciseDay.sets.get(lastIndex).reps));
+        }
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    sw.setTextOn("lbs");
+                } else {
+                    sw.setTextOff("kg");
                 }
-                sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            sw.setTextOn("lbs");
-                        } else {
-                            sw.setTextOff("kg");
+            }
+        });
+        new AlertDialog.Builder(holder.context).setTitle("Add Set").setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String repsValue = reps.getText().toString();
+                        String weightsValue = weights.getText().toString();
+                        String setsValue = sets.getText().toString();
+                        if (repsValue.isEmpty() || weightsValue.isEmpty() || setsValue.isEmpty()) {
+                            dialog.cancel();
+                            return;
                         }
-                    }
-                });
-                new AlertDialog.Builder(holder.context).setTitle("Add Set").setView(view)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            String repsValue = reps.getText().toString();
-                            String weightsValue = weights.getText().toString();
-                            String setsValue = sets.getText().toString();
-                            if (repsValue.isEmpty() || weightsValue.isEmpty() || setsValue.isEmpty()) {
-                                dialog.cancel();
-                                return;
-                            }
-                            boolean useLBS = sw.isChecked();
-                            Log.i(TAG, "reps " + repsValue);
-                            Log.i(TAG, "weight " + weightsValue);
-                            double weigthKgs = useLBS ? Double.parseDouble(weightsValue)*0.453592 : Double.parseDouble(weightsValue);
-                            List<Integer> reps = new ArrayList<>();
-                            if (repsValue.contains("-"))
+                        boolean useLBS = sw.isChecked();
+                        Log.i(TAG, "reps " + repsValue);
+                        Log.i(TAG, "weight " + weightsValue);
+                        double weigthKgs = useLBS ? Double.parseDouble(weightsValue)*0.453592 : Double.parseDouble(weightsValue);
+                        List<Integer> reps = new ArrayList<>();
+                        if (repsValue.contains("-"))
 //                                reps = Arrays.asList(repsValue.split("-")).stream()
 //                                        .map(s -> Integer.parseInt(s))
 //                                        .collect(Collectors.toList());
-                            {
-                                for(String v :repsValue.split("-"))
-                                    reps.add(Integer.parseInt(v));
-                            }
-                            if (repsValue.contains(","))
+                        {
+                            for(String v :repsValue.split("-"))
+                                reps.add(Integer.parseInt(v));
+                        }
+                        if (repsValue.contains(","))
 //                                reps = Arrays.asList(repsValue.split(",")).stream()
 //                                        .map(s -> Integer.parseInt(s))
 //                                        .collect(Collectors.toList());
-                            {
-                                for(String v :repsValue.split(","))
-                                    reps.add(Integer.parseInt(v));
+                        {
+                            for(String v :repsValue.split(","))
+                                reps.add(Integer.parseInt(v));
+                        }
+                        if (!reps.isEmpty())
+                        {
+                            for(int i = 0 ; i < reps.size(); i++) {
+                                exerciseDay.sets.add(new Set(reps.get(i), weigthKgs));
+                                holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
                             }
-                            if (!reps.isEmpty())
-                            {
-                                for(int i = 0 ; i < reps.size(); i++) {
-                                    exerciseDay.sets.add(new Set(reps.get(i), weigthKgs));
-                                    holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
-                                }
+                        }
+                        else {
+                            for(int i = 0 ; i < Integer.parseInt(setsValue); i++) {
+                                exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), weigthKgs));
+                                holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
                             }
-                            else {
-                                for(int i = 0 ; i < Integer.parseInt(setsValue); i++) {
-                                    exerciseDay.sets.add(new Set(Integer.parseInt(repsValue), weigthKgs));
-                                    holder.recyclerView.getAdapter().notifyItemInserted(exerciseDay.sets.size() - 1);
-                                }
-                            }
-
-                            DataManager.updateExercise(exerciseDay);
-                            dialog.cancel();
                         }
 
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    }).show();
-            }
-        });
+                        DataManager.updateExercise(exerciseDay);
+                        dialog.cancel();
+                    }
+
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
     }
 
     public void removeItem(int position) {
