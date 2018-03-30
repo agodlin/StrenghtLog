@@ -18,7 +18,8 @@ public class ExerciseContract {
                     TableEntry._ID + " INTEGER PRIMARY KEY," +
                     TableEntry.COLUMN_NAME_DATE + " INTEGER," +
                     TableEntry.COLUMN_NAME_EXERCISE + " TEXT," +
-                    TableEntry.COLUMN_NAME_SET + " TEXT)";
+                    TableEntry.COLUMN_NAME_SET + " TEXT," +
+                    TableEntry.COLUMN_NAME_COMMENT + " TEXT)";
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TableEntry.TABLE_NAME;
@@ -29,5 +30,6 @@ public class ExerciseContract {
         public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_EXERCISE = "exercise";
         public static final String COLUMN_NAME_SET = "sets";
+        public static final String COLUMN_NAME_COMMENT = "comment";
     }
 }

@@ -10,11 +10,17 @@ public class Exercise {
     public final String name;
     public final Date date;
     public final List<Set> sets;
+    public String comment;
 
     public Exercise(String name, Date date, List<Set> sets) {
+        this(name, date, sets, "");
+    }
+
+    public Exercise(String name, Date date, List<Set> sets, String comment) {
         this.name = name;
         this.date = date;
         this.sets = sets;
+        this.comment = comment;
     }
 
     public Exercise(Exercise rhs)

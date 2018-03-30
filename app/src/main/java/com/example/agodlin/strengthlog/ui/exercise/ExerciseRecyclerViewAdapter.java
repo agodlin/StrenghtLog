@@ -35,6 +35,7 @@ import com.example.agodlin.strengthlog.ui.exercises.ExerciseFragment;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,7 +83,9 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         String header = holder.viewType == 0 ? exerciseDay.name : exerciseDay.date.toString();
 
         holder.header.setText(header);
-        holder.footer.setText("comment");
+
+        holder.footer.setText(exerciseDay.comment);
+
         final ExerciseCardRecyclerViewAdapter adapter = new ExerciseCardRecyclerViewAdapter(exerciseDay.sets);
         holder.recyclerView.setAdapter(adapter);
 
@@ -172,6 +175,30 @@ public class ExerciseRecyclerViewAdapter extends RecyclerView.Adapter<ExerciseRe
         addCommentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.context);
+                final EditText input = new EditText(holder.context);
+                builder.setView(input);
+                builder.setTitle("Add comment")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String name = input.getText().toString();
+                        if (name.isEmpty())
+                        {
+                            Log.d(TAG, "Text Empty, do nothing");
+                            return;
+                        }
+                        Log.d(TAG, "Text set To : " + name);
+                        exerciseDay.comment = name;
+                        holder.footer.setText(name);
+                        DataManager.updateExercise(exerciseDay);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
                 dialog.dismiss();
             }
         });

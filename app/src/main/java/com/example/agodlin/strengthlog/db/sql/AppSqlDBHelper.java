@@ -74,6 +74,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_DATE, DateHelper.roundTimeToDay(calendar.getTimeInMillis()));
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE, exercise.name);
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_SET, gson.toJson(exercise.sets));
+        values.put(ExerciseContract.TableEntry.COLUMN_NAME_COMMENT, exercise.comment);
 
 // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(ExerciseContract.TableEntry.TABLE_NAME, null, values);
@@ -163,7 +164,8 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
                 BaseColumns._ID,
                 ExerciseContract.TableEntry.COLUMN_NAME_DATE,
                 ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE,
-                ExerciseContract.TableEntry.COLUMN_NAME_SET
+                ExerciseContract.TableEntry.COLUMN_NAME_SET,
+                ExerciseContract.TableEntry.COLUMN_NAME_COMMENT,
         };
 
 // Filter results WHERE "title" = 'My Title'
@@ -190,11 +192,12 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
             long millis = DateHelper.convertDaysToMilis(cursor.getLong(1));
             String name = cursor.getString(2);
             String setsJsonString = cursor.getString(3);
+            String comment = cursor.getString(4);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(millis);
             Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
             List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
-            items.add(new Exercise(name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets));
+            items.add(new Exercise(name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets, comment));
         }
         cursor.close();
         return items;
@@ -210,7 +213,8 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
                 BaseColumns._ID,
                 ExerciseContract.TableEntry.COLUMN_NAME_DATE,
                 ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE,
-                ExerciseContract.TableEntry.COLUMN_NAME_SET
+                ExerciseContract.TableEntry.COLUMN_NAME_SET,
+                ExerciseContract.TableEntry.COLUMN_NAME_COMMENT,
         };
 
 // Filter results WHERE "title" = 'My Title'
@@ -236,11 +240,12 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
             int _id = cursor.getInt(0);
             long millis = DateHelper.convertDaysToMilis(cursor.getLong(1));
             String setsJsonString = cursor.getString(3);
+            String comment = cursor.getString(4);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(millis);
             Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
             List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
-            items.add(new Exercise(name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets));
+            items.add(new Exercise(name, new Date(calendar.get(Calendar.DATE),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR)), sets, comment));
         }
         cursor.close();
         return items;
@@ -256,7 +261,8 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
                 BaseColumns._ID,
                 ExerciseContract.TableEntry.COLUMN_NAME_DATE,
                 ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE,
-                ExerciseContract.TableEntry.COLUMN_NAME_SET
+                ExerciseContract.TableEntry.COLUMN_NAME_SET,
+                ExerciseContract.TableEntry.COLUMN_NAME_COMMENT,
         };
         Calendar calendar = Calendar.getInstance();
         calendar.set(date.year, date.month, date.day);
@@ -284,9 +290,10 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
             long millis = DateHelper.convertDaysToMilis(cursor.getLong(1));
             String name = cursor.getString(2);
             String setsJsonString = cursor.getString(3);
+            String comment = cursor.getString(4);
             Type listType = new TypeToken<ArrayList<com.example.agodlin.strengthlog.common.Set>>(){}.getType();
             List<com.example.agodlin.strengthlog.common.Set> sets = new Gson().fromJson(setsJsonString, listType);
-            items.add(new Exercise(name, new Date(date.day,date.month,date.year), sets));
+            items.add(new Exercise(name, new Date(date.day,date.month,date.year), sets, comment));
         }
         cursor.close();
         return items;
@@ -332,6 +339,7 @@ public class AppSqlDBHelper extends SQLiteOpenHelper {
         Gson gson = new Gson();
         calendar.set(exercise.date.year, exercise.date.month, exercise.date.day);
         values.put(ExerciseContract.TableEntry.COLUMN_NAME_SET, gson.toJson(exercise.sets));
+        values.put(ExerciseContract.TableEntry.COLUMN_NAME_COMMENT, exercise.comment);
 
 // Which row to update, based on the title
         String selection = ExerciseContract.TableEntry.COLUMN_NAME_DATE + " = ? AND " + ExerciseContract.TableEntry.COLUMN_NAME_EXERCISE + " = ? ";
